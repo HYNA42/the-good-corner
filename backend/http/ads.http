@@ -1,0 +1,73 @@
+GET http://localhost:3000/ads?category=vetement
+
+###
+
+GET http://localhost:3000/ads
+
+###
+
+GET http://localhost:3000/ads?title=appart
+
+
+###
+
+GET  http://localhost:3000/ads/2
+
+###
+
+POST http://localhost:3000/ads
+Content-Type: application/json
+
+{
+  "title": "Appartement T3 à Marseille",
+  "description": "Appartement T3 lumineux et spacieux, situé en plein cœur de Paris. 70m².",
+  "owner": "realestate.seller1@gmail.com",
+  "price": 300000,
+  "picture": "https://imgs.search.brave.com/Q9b-meeqBLBnf0CPz3MeCDZMcNlcrKdddVJ0rJTTSSM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTc0/NjY3MDM1L2ZyL3Bo/b3RvL2ZyZW5jaC1h/cmNoaXRlY3R1ci0l/QzMlQTAtcGFyaXMu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PW9zVDBLcmJkbU9s/VmpwQWZJVEJhMGVo/U1VzTXdqaWUxUmpL/eUg0SDdLZUk9",
+  "location": "Marseille",
+  "createdAt": "2024-07-05T10:00:00.755Z",
+  "category": 4,
+  "tags": [1]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# {
+#     "title": "ploup to sell n° 31",
+#     "description":
+#       "My bike is blue, working fine. I'm selling it because I've got a new one",
+#     "owner": "bike.seller@gmail.com",
+#     "price": 100,
+#     "picture":
+#       "https://images.lecho.be/view?iid=dc:113129565&context=ONLINE&ratio=16/9&width=640&u=1508242455000",
+#     "location": "Paris",
+#     "createdAt": "2023-09-05T10:13:14.755Z",
+#     "category": 2,
+#     "tags": [2]
+# }
+
+###
+
+DELETE http://localhost:3000/ads/33
+
+###
+
+PUT http://localhost:3000/ads/51
+Content-Type: application/json
+
+{
+  "picture":"https://imgs.search.brave.com/X9bQ8howRVJbU4sigomYBVRFkUTP5KZ8r02vH23M7Sg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTM4/ODAyNDIwNi9mci9w/aG90by9hcHBhcnRl/bWVudHMtYXZlYy1i/YWxjb25zLSVDMyVB/MC1iYXR0ZXJzZWEt/bG9uZHJlcy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9d0tL/eENna1RLc0VaaTVG/Y2ZqTFRablJkQ0lD/ZUxyRlJfVXpvY3V4/QjJCbz0"
+}
+
+

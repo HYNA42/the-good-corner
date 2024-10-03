@@ -1,0 +1,41 @@
+-- CREATE TABLE ad IF NOT EXISTS
+-- (
+-- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 	title VARCHAR(100) NOT NULL,
+-- 	description TEXT,
+-- 	owner VARCHAR(100) NOT NULL,
+-- 	price INT,
+--     picture VARCHAR(100),
+--     location VARCHAR(100),
+-- 	createdAt DATE
+-- );
+
+-- INSERT INTO ad (title, description, owner, price, picture, location, createdAt) 
+-- VALUES 
+-- ('Chaussures', 'Comme neuves', 'alice@dupont.fr', 35, 'https://image.fr/chaussures.jpg', 'Paris', DATETIME('now')),
+-- ('Vélo de route', 'Vélo très léger, idéal pour la ville', 'jean.pierre@mail.fr', 150, 'https://image.fr/velo.jpg', 'Lyon', DATETIME('now')),
+-- ('Ordinateur portable', 'Portable avec 16Go de RAM, parfait état', 'laura.durand@mail.com', 550, 'https://image.fr/ordinateur.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Canapé 3 places', 'Canapé en cuir noir, excellent état', 'maxime.legrand@mail.fr', 300, 'https://image.fr/canape.jpg', 'Paris', DATETIME('now')),
+-- ('Table basse', 'Table en bois massif, style scandinave', 'sophie.lemarchal@mail.fr', 70, 'https://image.fr/table_basse.jpg', 'Lyon', DATETIME('now')),
+-- ('Vélo électrique', 'Vélo en excellent état, batterie incluse', 'antoine.duval@mail.com', 1200, 'https://image.fr/velo_electrique.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Appareil photo', 'Reflex Nikon, peu utilisé, avec objectif 50mm', 'claire.martin@mail.fr', 450, 'https://image.fr/appareil_photo.jpg', 'Paris', DATETIME('now')),
+-- ('Télévision', 'TV 4K Samsung, 50 pouces, presque neuve', 'julien.moreau@mail.fr', 600, 'https://image.fr/tv.jpg', 'Lyon', DATETIME('now')),
+-- ('Console de jeu', 'PlayStation 5, comme neuve avec deux manettes', 'amelie.dubois@mail.fr', 400, 'https://image.fr/ps5.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Montre connectée', 'Apple Watch Series 6, bon état', 'vincent.lefevre@mail.fr', 250, 'https://image.fr/apple_watch.jpg', 'Paris', DATETIME('now')),
+-- ('Casque audio', 'Casque Bose sans fil, très bon son', 'lea.perrin@mail.fr', 150, 'https://image.fr/casque_bose.jpg', 'Lyon', DATETIME('now')),
+-- ('Smartphone', 'Samsung Galaxy S21, écran intact', 'alexandre.morel@mail.fr', 500, 'https://image.fr/samsung_galaxy.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Sac à dos', 'Sac à dos de randonnée, grande capacité', 'julie.renaud@mail.fr', 80, 'https://image.fr/sac_a_dos.jpg', 'Paris', DATETIME('now')),
+-- ('Machine à laver', 'Machine Bosch, en bon état', 'marie.dubreuil@mail.fr', 200, 'https://image.fr/machine_a_laver.jpg', 'Lyon', DATETIME('now')),
+-- ('Lave-vaisselle', 'Lave-vaisselle Siemens, quasi neuf', 'thomas.leroux@mail.fr', 300, 'https://image.fr/lave_vaisselle.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Four micro-ondes', 'Four micro-ondes Samsung, bon état', 'paul.lambert@mail.fr', 80, 'https://image.fr/micro_ondes.jpg', 'Paris', DATETIME('now')),
+-- ('Aspirateur', 'Aspirateur Dyson, très peu utilisé', 'sarah.besson@mail.fr', 150, 'https://image.fr/aspirateur.jpg', 'Lyon', DATETIME('now')),
+-- ('Lit 2 places', 'Lit en bois massif, 160x200 cm', 'louis.rocher@mail.fr', 250, 'https://image.fr/lit.jpg', 'Bordeaux', DATETIME('now')),
+-- ('Bureau', 'Bureau en verre trempé, parfait pour le télétravail', 'emma.faure@mail.fr', 120, 'https://image.fr/bureau.jpg', 'Paris', DATETIME('now')),
+-- ('Bibliothèque', 'Bibliothèque en chêne, grande capacité', 'nicolas.dupuy@mail.fr', 180, 'https://image.fr/bibliotheque.jpg', 'Lyon', DATETIME('now'));
+
+-- CREATE TABLE IF NOT EXISTS category (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     title VARCHAR(100) NOT NULL
+-- );
+
+-- DROP TABLE category
