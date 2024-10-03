@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { AdCardProps } from "../components/AdCard";
 
 const AdDetailsPage = () => {
@@ -49,6 +49,13 @@ const AdDetailsPage = () => {
             Envoyer un email
           </a>
         </div>
+        {/* ici */}
+        <Link
+          className="button"
+          to={`http://localhost:5173/ad/edit/${adDetails?.id}`}
+        >
+          Editer l'annonce
+        </Link>
       </section>
     </div>
   );

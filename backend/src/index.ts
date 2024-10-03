@@ -64,10 +64,16 @@ app.get("/ads", async (req, res) => {
       },
     });
   }
-  if (req.query.title) { //recherche par titre
+  if (req.query.title) {
+    //recherche par titre
+    // Recherche par titre, avec inclusion de la relation 'category'
     ads = await Ad.find({
       where: {
         title: Like(`%${req.query.title as string}%`),
+      },
+      relations: ["category", "tags"], // Inclut les relations avec 'category' et 'tags'
+      order: {
+        createdAt: "DESC", // Trie par date de création
       },
     });
   } else {
@@ -81,9 +87,23 @@ app.get("/ads", async (req, res) => {
   res.send(ads);
 });
 
+app.get("/ads/category/:keyword", async (req, res) => {
+  const { keyword } = req.params;
+  try {
+    const ads = await Ad.find({
+      where: {
+        category: { title: keyword },
+      },
+      relations: { category: true, tags: true },
+    });
+    res.send(ads);
+  } catch (error) {
+    console.error("Error while trying to get ads:", error);
+    res.status(500).send("Server error");
+  }
+});
+
 //récupère une annonce en fonction de son id récupéré dans l'url
-
-
 
 app.get("/ads/:id", async (req, res) => {
   // let ads: Ad[];

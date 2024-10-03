@@ -74,7 +74,11 @@ const Header = () => {
       </div>
       <nav className="categories-navigation">
         {categories.map((el) => (
-          <Link key={el.id} to="" className="category-navigation-link">
+          <Link
+            key={el.id}
+            to={`/ad/category/${el.title}`}
+            className="category-navigation-link"
+          >
             {el.title}
           </Link>
         ))}
