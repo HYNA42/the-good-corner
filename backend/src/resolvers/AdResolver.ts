@@ -26,7 +26,7 @@ class AdResolver {
     return ad;
   }
 
-  //créer une annonce
+  //créer une an - 
   //   @Mutation(() => Ad)
   //   async createNewAd(
   //     @Arg("title") title: string,
