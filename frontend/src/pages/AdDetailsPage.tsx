@@ -14,6 +14,7 @@ const AdDetailsPage = () => {
     };
     fetchAdDetails();
   }, [id]);
+  //vérifier si !adDetails return loadin, sinon return le formulaire pré rempli 
   return (
     <div>
       <h2 className="ad-details-title">{adDetails?.title}</h2>

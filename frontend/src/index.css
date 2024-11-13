@@ -200,3 +200,9 @@ h1 {
   background-color: lightgray;
   border: none;
 }
+
+.error-message {
+  color: red;
+  margin-left: 10px;
+  font-size: 14px;
+}

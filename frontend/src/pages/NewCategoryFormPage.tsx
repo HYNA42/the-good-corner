@@ -1,26 +1,54 @@
+import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
+import { Fragment } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+  title: string;
+};
 
 const NewCategoryFormPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>({ criteriaMode: "all" });
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await axios.post("http://localhost:3000/categories", data);
+  };
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        // Read the form data
-        const form = e.target;
-        const formData = new FormData(form as HTMLFormElement);
-
-        // Or you can work with it as a plain object:
-        const formJson = Object.fromEntries(formData.entries());
-        axios.post("http://localhost:3000/categories", formJson);
-      }}
-    >
-      <label>
-        Titre de la catégorie:
-        <br />
-        <input className="text-field" type="text" name="title" />
-      </label>
-      <button className="button">Submit</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>
+          Titre de la catégorie:
+          <br />
+          <input
+            className="text-field"
+            {...register("title", {
+              minLength: { value: 2, message: "Minimum 2 characters" },
+              required: "This field is required",
+            })}
+          />
+        </label>
+        <ErrorMessage
+          errors={errors}
+          name="title"
+          render={({ messages }) =>
+            messages &&
+            Object.entries(messages).map(([type, message]) => {
+              console.log(message);
+              return (
+                <Fragment key={type}>
+                  <br />
+                  <span className="error-message">{message}</span>
+                </Fragment>
+              );
+            })
+          }
+        />
+        <input type="submit" className="button" />
+      </form>
+    </>
   );
 };
 

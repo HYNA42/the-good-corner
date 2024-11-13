@@ -6,11 +6,13 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { Category } from "./Category";
 import { Tag } from "./Tag";
+import { Picture } from "./Picture";
 
 @Entity()
 export class Ad extends BaseEntity {
@@ -30,8 +32,8 @@ export class Ad extends BaseEntity {
   @Column()
   price: number;
 
-  @Column()
-  picture: string;
+  // @Column()
+  // picture: string;
 
   @Column()
   location: string;
@@ -47,4 +49,11 @@ export class Ad extends BaseEntity {
   @ManyToMany(() => Tag, (tag) => tag.ads)
   @JoinTable()
   tags: Tag[];
+
+  //Relation One-To-many avec la table image
+  @OneToMany(() => Picture, (picture) => picture.ad, {
+    cascade: true,
+    eager: true,
+  })
+  pictures: Picture[];
 }

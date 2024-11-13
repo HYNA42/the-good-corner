@@ -5,9 +5,10 @@ import { dataSourceGoodCorner } from "./config/db";
 import { Ad } from "./entities/Ad";
 import { validate } from "class-validator";
 import { Category } from "./entities/Category";
-import { In, Like } from "typeorm";
+import {Like } from "typeorm";
 import { Tag } from "./entities/Tag";
 import cors from "cors";
+import { Picture } from "./entities/Picture";
 
 // const db = new sqlite3.Database("good_corner.sqlite");
 
@@ -130,14 +131,22 @@ app.get("/ads/:id", async (req, res) => {
 
 app.post("/ads", async (req, res) => {
   console.log("request body", req.body);
+  const pictures: Picture[] = [];
+
+  req.body.pictures.forEach(async (el: string) => {
+    const newPicture = new Picture();
+    newPicture.url = el;
+    pictures.push(newPicture);
+  })
 
   // Création de l'annonce
   const adToSave = new Ad();
+
   adToSave.createdAt = req.body.createdAt;
   adToSave.description = req.body.description;
   adToSave.location = req.body.location;
   adToSave.owner = req.body.owner;
-  adToSave.picture = req.body.picture;
+  // adToSave.picture = req.body.picture;
   adToSave.price = req.body.price;
   adToSave.title = req.body.title;
 
@@ -145,13 +154,20 @@ app.post("/ads", async (req, res) => {
   adToSave.category = req.body.category ? req.body.category : 1;
 
   // Récupérer les tags par leurs IDs
-  if (req.body.tags && req.body.tags.length > 0) {
-    const tags = await Tag.find({
-      where: {
-        id: In(req.body.tags),
-      },
-    });
-    adToSave.tags = tags; // Associer les tags à l'annonce
+  // if (req.body.tags && req.body.tags.length > 0) {
+  //   const tags = await Tag.find({
+  //     where: {
+  //       id: In(req.body.tags),
+  //     },
+  //   });
+  //   adToSave.tags = tags; // Associer les tags à l'annonce
+  // }
+  if (req.body.tags) {
+    adToSave.tags = req.body.tags;
+  }
+
+  if (pictures.length > 0) {
+    adToSave.pictures = pictures;
   }
 
   // Valider et sauvegarder l'annonce
@@ -160,8 +176,13 @@ app.post("/ads", async (req, res) => {
     console.log(errors);
     res.status(400).send("Invalid input");
   } else {
-    const result = await adToSave.save();
-    res.send(result);
+    try {
+      const result = await adToSave.save();
+      res.send(result);
+    } catch (err) {
+      console.log("err", err);
+      res.status(400).send(JSON.stringify(err));
+    }
   }
 });
 

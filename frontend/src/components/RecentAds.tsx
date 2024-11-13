@@ -44,6 +44,13 @@ const RecentAds = () => {
             >
               Delete
             </button>
+
+            {/* <Link
+              className="button"
+              to={`http://localhost:5173/ad/edit/${ads?.id}`}
+            >
+              Editer l'annonce
+            </Link> */}
           </div>
         ))}
       </section>

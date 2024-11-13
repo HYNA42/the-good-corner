@@ -3,12 +3,15 @@ import { useEffect, useState } from "react";
 import { category } from "../components/Header";
 import { AdCardProps } from "../components/AdCard";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditAd = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState([] as category[]);
   const [adDetails, setAdDetails] = useState<AdCardProps>();
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -35,20 +38,28 @@ const EditAd = () => {
     return (
       <form
         className="abc"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const form = e.target;
           const formData = new FormData(form as HTMLFormElement);
 
           const formJson = Object.fromEntries(formData.entries());
           try {
-            axios.put(`http://localhost:3000/ads/${id}`, formJson);
+            // Effectue la requête PUT pour mettre à jour l'annonce
+            await axios.put(`http://localhost:3000/ads/${id}`, formJson);
 
+            // Affiche un toast de succès
+            toast.success("L'annonce a été modifiée avec succès !");
+
+            // Redirige l'utilisateur après un délai de 2 secondes pour laisser le toast s'afficher
             setTimeout(() => {
               navigate("/");
-            }, 1000);
+            }, 2000);
           } catch (err) {
+            //EN cas d'erreur
             console.error("Error while trying to edit ad:", err);
+            //Afficher un toast d'erreur
+            toast.error("Une erreur est survenue lors de la modification.")
           }
         }}
       >
