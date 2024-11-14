@@ -1,11 +1,8 @@
-// src/tests/AdInputTest.ts
 import "reflect-metadata";
 import { Field, ID, InputType } from "type-graphql";
-import { Ad } from "../entities/Ad";
-// import { Category } from "../entities/Category";
 
 @InputType()
-class AdInput implements Partial<Ad> {
+class AdInput {
   @Field()
   title: string;
 
@@ -23,9 +20,13 @@ class AdInput implements Partial<Ad> {
 
   @Field()
   createdAt: Date;
+
   // recevoir uniquement l'ID de la catégorie et non l'objet
   @Field(() => ID)
   categoryId: number;
+
+  @Field(() => [String], { nullable: true })
+  picturesUrls?: string[];
 }
 
 export default AdInput;

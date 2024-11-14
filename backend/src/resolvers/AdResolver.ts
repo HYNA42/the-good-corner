@@ -3,6 +3,7 @@ import { Ad } from "../entities/Ad";
 import AdInput from "../inputs/AdInput";
 import { Category } from "../entities/Category";
 import UpdateAdInput from "../inputs/UpdateAdInput";
+import { Picture } from "../entities/Picture";
 // import { Category } from "src/entities/Category";
 
 @Resolver(() => Ad)
@@ -27,49 +28,18 @@ class AdResolver {
     return ad;
   }
 
-  //créer une an -
-  //   @Mutation(() => Ad)
-  //   async createNewAd(
-  //     @Arg("title") title: string,
-  //     @Arg("description") description: string,
-  //     @Arg("owner") owner: string,
-  //     @Arg("price") price: number,
-  //     @Arg("location") location: string,
-  //     @Arg("createdAt") createdAt: Date
-
-  //   ) {
-  //     // Création de l'annonce
-  //     const adToSave = new Ad();
-  //     adToSave.title = title;
-  //     adToSave.description = description;
-  //     adToSave.owner = owner;
-  //     adToSave.price = price;
-  //     adToSave.location = location;
-  //     adToSave.createdAt = createdAt;
-
-  //     const result = await adToSave.save();
-  //     // console.log(result);
-  //     return result;
-  //   }
-  //   @Mutation(() => Ad)
-  //   async createNewAd(@Arg("data") newAdData: AdInput) {
-  //     const adToSave = new Ad();
-  //     adToSave.createdAt = newAdData.createdAt;
-  //     adToSave.description = newAdData.description;
-  //     adToSave.location = newAdData.location;
-  //     adToSave.owner = newAdData.owner;
-  //     adToSave.price = newAdData.price;
-  //     adToSave.title = newAdData.title;
-  //     adToSave.category = newAdData.category;
-
-  //     const result = await adToSave.save();
-  //     return result;
-  //   }
-
   // Crée une nouvelle annonce
   @Mutation(() => Ad)
   async createNewAd(@Arg("data") newAdData: AdInput) {
     // Recherche la catégorie via categoryId
+    const pictures: Picture[] = [];
+    if (newAdData.picturesUrls) {
+      newAdData.picturesUrls.forEach((el) => {
+        const newPicture = new Picture();
+        newPicture.url = el;
+        pictures.push(newPicture);
+      });
+    }
     const category = await Category.findOneBy({ id: newAdData.categoryId });
     if (!category) throw new Error("Category not found");
 
@@ -77,15 +47,17 @@ class AdResolver {
     const adToSave = Ad.create({
       ...newAdData,
       category,
+      pictures,
     });
 
-    return await adToSave.save();
+    const result = await adToSave.save();
+    return result;
   }
 
   // modifier une annonce
   @Mutation(() => Ad)
   async updateAd(@Arg("data") updateData: UpdateAdInput) {
-    let adToUpdate = await Ad.findOneByOrFail({ id: updateData.id});
+    let adToUpdate = await Ad.findOneByOrFail({ id: updateData.id });
     adToUpdate = Object.assign(adToUpdate, updateData);
     const result = await adToUpdate.save();
     return result;

@@ -39,9 +39,6 @@ export class Ad extends BaseEntity {
   @Column()
   price: number;
 
-  // @Column()
-  // picture: string;
-
   @Field()
   @Column()
   location: string;
@@ -56,11 +53,16 @@ export class Ad extends BaseEntity {
   category: Category;
 
   //Relation Many-To6Many avec les Tags
-  @ManyToMany(() => Tag, (tag) => tag.ads)
+  @Field(()=>[Tag])
+  @ManyToMany(() => Tag, (tag) => tag.ads,{
+    cascade: true,
+    eager: true,
+  })
   @JoinTable()
   tags: Tag[];
 
   //Relation One-To-many avec la table image
+  @Field(()=>[Picture],{ nullable: true })
   @OneToMany(() => Picture, (picture) => picture.ad, {
     cascade: true,
     eager: true,
