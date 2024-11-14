@@ -5,13 +5,14 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { dataSourceGoodCorner } from "./config/db";
 import { buildSchema } from "type-graphql";
 import AdResolver  from "./resolvers/AdResolver";
+import CategoryResolver  from "./resolvers/CategoryResolver";
 
 const start = async () => {
   await dataSourceGoodCorner.initialize(); // Initialise la connexion à la base de données
 
   // Construit le schéma avec `type-graphql`
   const schema = await buildSchema({
-    resolvers: [AdResolver], // Enregistre le resolver pour les annonces (Ad)
+    resolvers: [AdResolver,CategoryResolver], // Enregistre le resolver pour les annonces (Ad)
   });
 
   // Crée le serveur Apollo avec le schéma `type-graphql`
