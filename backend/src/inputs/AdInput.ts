@@ -23,7 +23,7 @@ class AdInput implements Partial<Ad> {
 
   @Field()
   createdAt: Date;
-   // recevoir uniquement l'ID de la catégorie et non l'objet
+  // recevoir uniquement l'ID de la catégorie et non l'objet
   @Field(() => ID)
   categoryId: number;
 }

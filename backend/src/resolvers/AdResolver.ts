@@ -2,6 +2,7 @@ import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Ad } from "../entities/Ad";
 import AdInput from "../inputs/AdInput";
 import { Category } from "../entities/Category";
+import UpdateAdInput from "../inputs/UpdateAdInput";
 // import { Category } from "src/entities/Category";
 
 @Resolver(() => Ad)
@@ -26,7 +27,7 @@ class AdResolver {
     return ad;
   }
 
-  //créer une an - 
+  //créer une an -
   //   @Mutation(() => Ad)
   //   async createNewAd(
   //     @Arg("title") title: string,
@@ -67,7 +68,7 @@ class AdResolver {
 
   // Crée une nouvelle annonce
   @Mutation(() => Ad)
-  async createNewAd(@Arg("data") newAdData: AdInput): Promise<Ad> {
+  async createNewAd(@Arg("data") newAdData: AdInput) {
     // Recherche la catégorie via categoryId
     const category = await Category.findOneBy({ id: newAdData.categoryId });
     if (!category) throw new Error("Category not found");
@@ -79,6 +80,24 @@ class AdResolver {
     });
 
     return await adToSave.save();
+  }
+
+  // modifier une annonce
+  @Mutation(() => Ad)
+  async updateAd(@Arg("data") updateData: UpdateAdInput) {
+    let adToUpdate = await Ad.findOneByOrFail({ id: updateData.id});
+    adToUpdate = Object.assign(adToUpdate, updateData);
+    const result = await adToUpdate.save();
+    return result;
+  }
+
+  // supprimer une annonce
+  @Mutation(() => String)
+  async deleteAd(@Arg("id") id: number) {
+    let adToDelete = await Ad.findOneByOrFail({ id: id });
+    const result = await Ad.remove(adToDelete);
+    console.log(result);
+    return "Ad has been deleted";
   }
 }
 
