@@ -1,28 +1,30 @@
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery, gql } from "@apollo/client";
 
 export type category = {
   id: number;
   title: string;
 };
 
+const GET_ALL_CATEGORY = gql`
+  query GetAllCategory {
+    getAllCategory {
+      id
+      title
+    }
+  }
+`;
+
 const Header = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([] as category[]);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const result = await axios.get("http://localhost:3000/categories");
-        setCategories(result.data);
-      } catch (err) {
-        console.log("err", err);
-      }
-    };
-    fetchCategories();
-  }, []);
+
+  const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+  console.log(data);
+
   return (
     <header className="header">
       <div className="main-menu">
@@ -73,7 +75,7 @@ const Header = () => {
         </Link>
       </div>
       <nav className="categories-navigation">
-        {categories.map((el) => (
+        {data.getAllCategory.map((el:any) => (
           <Link
             key={el.id}
             to={`/ad/category/${el.title}`}
