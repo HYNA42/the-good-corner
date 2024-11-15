@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Field, ID, InputType } from "type-graphql";
+import { Field, ID, InputType, Int } from "type-graphql";
 
 @InputType()
 class AdInput {
@@ -27,6 +27,10 @@ class AdInput {
 
   @Field(() => [String], { nullable: true })
   picturesUrls?: string[];
+
+  // Reçoit une liste d'IDs de tags plutôt que des objets Tag complets
+  @Field(() => [Int], { nullable: true })
+  tagIds?: number[];
 }
 
 export default AdInput;

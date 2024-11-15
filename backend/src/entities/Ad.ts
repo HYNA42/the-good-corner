@@ -53,7 +53,7 @@ export class Ad extends BaseEntity {
   category: Category;
 
   //Relation Many-To6Many avec les Tags
-  @Field(()=>[Tag])
+  @Field(()=>[Tag],{ nullable: true })
   @ManyToMany(() => Tag, (tag) => tag.ads,{
     cascade: true,
     eager: true,
