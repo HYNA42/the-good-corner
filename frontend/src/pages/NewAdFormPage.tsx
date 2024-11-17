@@ -1,57 +1,54 @@
-import axios from "axios";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { toast } from "react-toastify";
-import { category } from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
+
+import { useQuery, gql, useMutation } from "@apollo/client";
+
+//define query => to fetch tag & category
+const GET_ALL_CATEGORY_AND_TAG = gql`
+  query GetAllTagAndCategory {
+    getAllTag {
+      id
+      name
+    }
+    getAllCategory {
+      id
+      title
+    }
+  }
+`;
+
+// define mutation => create new ad
+const POST_NEW_ADD = gql`
+  mutation CreateNewAd($data: AdInput!) {
+    createNewAd(data: $data) {
+      id
+      title
+    }
+  }
+`;
 
 type Inputs = {
   title: string;
   description: string;
   owner: string;
   price: number;
-  // picture: string;
   location: string;
   createdAt: Date;
-  category: number;
-  tags: number[];
-  pictures: { url: string }[]; // Tableau d'images sous forme d'objets avec une clé `url`
+  categoryId: number; // Remplacer "category" par "categoryId"
+  pictures: { url: string }[]; // Garder "pictures" pour le formulaire
+  picturesUrls: string[]; // Correspond à "picturesUrls" attendu par l'API
+  tagIds: number[]; // Remplacer "tags" par "tagIds"
 };
 
-type Tags = {
-  id: number;
-  name: string;
-};
+// type Tags = {
+//   id: number;
+//   name: string;
+// };
 
 const NewAdFormPage = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([] as category[]);
-  const [tags, setTags] = useState([] as Tags[]);
-
-  // Fetch categories and tags
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const result = await axios.get("http://localhost:3000/categories");
-        setCategories(result.data);
-      } catch (err) {
-        console.log("Error fetching categories", err);
-      }
-    };
-
-    const fetchTags = async () => {
-      try {
-        const result = await axios.get("http://localhost:3000/tags");
-        setTags(result.data);
-      } catch (err) {
-        console.log("Error fetching tags", err);
-      }
-    };
-
-    fetchTags();
-    fetchCategories();
-  }, []);
-
   // Setup form validation with React Hook Form
   const {
     register,
@@ -66,21 +63,57 @@ const NewAdFormPage = () => {
     name: "pictures", // managing pictures array
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  //useQuery for fetching categories and tags
+  const {
+    loading: queryLoading,
+    error: queryError,
+    data: queryData,
+  } = useQuery(GET_ALL_CATEGORY_AND_TAG);
+
+  // UseMutation for crating new ad
+  const [
+    createNewAd,
+    { data: mutationData, loading: mutationLoading, error: mutationError },
+  ] = useMutation(POST_NEW_ADD);
+
+  const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     const dataForBackend = {
-      ...data,
-      tags: data.tags.map((el) => ({ id: el })),
+      title: formData.title,
+      description: formData.description,
+      owner: formData.owner,
+      price: parseFloat(formData.price.toString()), // Convertir en Float
+      location: formData.location,
+      createdAt: new Date(formData.createdAt).toISOString(), // Assurez-vous que c'est une ISO string
+      categoryId: parseInt(formData.categoryId.toString(), 10), // Utilisez uniquement categoryId
+      picturesUrls: formData.pictures.map((pic) => pic.url), // Conservez uniquement les URLs
+      tagIds: formData.tagIds.map((tag) => parseInt(tag.toString(), 10)), // Utilisez uniquement tagIds
     };
 
+    console.log("Payload sent to backend:", dataForBackend);
+
     try {
-      await axios.post("http://localhost:3000/ads", dataForBackend);
+      // await axios.post("http://localhost:3000/ads", dataForBackend);
+      await createNewAd({ variables: { data: dataForBackend } });
       toast.success("Ad has been added");
       navigate("/");
     } catch (error) {
       console.log("Error submitting ad:", error);
-      toast.error("An error occurred while submitting the ad");
+      toast.error("Une erreur est survenue lors de la création de l'annonce.");
     }
   };
+
+  // Handling query states
+  if (queryLoading) return <p>Loading categories and tags...</p>;
+  if (queryError) return <p>Error fetching data: {queryError.message}</p>;
+  console.log("all categoris & tags : ", queryData);
+
+  // Handling mutation states
+  if (mutationLoading) return <p>Creating ad...</p>;
+  if (mutationError) return <p>Error creating ad: {mutationError.message}</p>;
+
+  if (mutationData) {
+    console.log("Mutation successful:", mutationData);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -148,23 +181,8 @@ const NewAdFormPage = () => {
         )}
       </label>
 
+      {/* images */}
       <br />
-      {/* <label>
-        Image:
-        <br />
-        <input
-          className="text-field"
-          {...register("picture", {
-            required: "L'image est requise",
-            minLength: { value: 2, message: "Minimum 2 characters" },
-          })}
-        />
-        {errors.picture && (
-          <p className="error error-message">{errors.picture.message}</p>
-        )}
-      </label> */}
-
-      {/* Gestion dynamique des images */}
       <label>
         Images:
         <div>
@@ -191,6 +209,7 @@ const NewAdFormPage = () => {
           </button>
         </div>
       </label>
+      {/* images */}
 
       <br />
       <label>
@@ -218,6 +237,12 @@ const NewAdFormPage = () => {
           {...register("createdAt", {
             required: "La date est requise",
           })}
+          // onChange={(e) => {
+          //   const dateValue = e.target.value;
+          //   const test = new Date(dateValue).toISOString();
+
+          //   console.log("Date saisie:", dateValue, "Type:", typeof dateValue, "date ISo",test);
+          // }}
         />
         {errors.createdAt && (
           <p className="error error-message">{errors.createdAt.message}</p>
@@ -230,17 +255,17 @@ const NewAdFormPage = () => {
         <br />
         <select
           className="text-field"
-          {...register("category", { required: "La catégorie est requise" })}
+          {...register("categoryId", { required: "La catégorie est requise" })}
         >
           <option value="">Choisissez une catégorie</option>
-          {categories.map((el) => (
+          {queryData.getAllCategory.map((el: any) => (
             <option key={el.id} value={el.id}>
               {el.title}
             </option>
           ))}
         </select>
-        {errors.category && (
-          <p className="error error-message">{errors.category.message}</p>
+        {errors.categoryId && (
+          <p className="error error-message">{errors.categoryId.message}</p>
         )}
       </label>
 
@@ -248,20 +273,20 @@ const NewAdFormPage = () => {
       <label>
         Tags :
         <br />
-        {tags.map((tag) => (
+        {queryData.getAllTag.map((tag: any) => (
           <Fragment key={tag.id}>
             <label>
               <input
                 type="checkbox"
                 value={tag.id}
-                {...register("tags", { required: "Un tag est requis" })}
+                {...register("tagIds", { required: "Un tag est requis" })}
               />
               {tag.name}
             </label>
             <br />
           </Fragment>
         ))}
-        {errors.tags && (
+        {errors.tagIds && (
           <p className="error error-message">{"Au moins un tag est requis"}</p>
         )}
       </label>

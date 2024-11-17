@@ -1,26 +1,67 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { AdCardProps } from "../components/AdCard";
+// import axios from "axios";
+// import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; //useParams
+// import { AdCardProps } from "../components/AdCard";
+
+import { gql, useQuery } from "@apollo/client";
+
+const GET_ADD_BY_ID = gql`
+  query GetAdById($getAdByIdId: Float!) {
+    getAdById(id: $getAdByIdId) {
+      id
+      title
+      description
+      owner
+      price
+      location
+      createdAt
+      pictures {
+        url
+      }
+    }
+  }
+`;
 
 const AdDetailsPage = () => {
-  const { id } = useParams();
-  const [adDetails, setAdDetails] = useState<AdCardProps>();
-  useEffect(() => {
-    const fetchAdDetails = async () => {
-      const result = await axios.get(`http://localhost:3000/ads/${id}`);
-      console.log(result);
-      setAdDetails(result.data);
-    };
-    fetchAdDetails();
-  }, [id]);
-  //vérifier si !adDetails return loadin, sinon return le formulaire pré rempli 
+  // const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
+  const parsedId = parseInt(id || "0", 10);
+  console.log("id", id, "parsedId", parsedId);
+
+  const { loading, error, data } = useQuery(GET_ADD_BY_ID, {
+    variables: { getAdByIdId: parsedId }, // Convertir l'ID en entier
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+
+  console.log("loading", loading);
+  console.log("error", error);
+  console.log("data", data);
+
+  const adDetails = data?.getAdById;
+
+  // console.log("AllAd",adDetails);
+
+  // const [adDetails, setAdDetails] = useState<AdCardProps>();
+  // useEffect(() => {
+  //   const fetchAdDetails = async () => {
+  //     const result = await axios.get(`http://localhost:3000/ads/${id}`);
+  //     console.log(result);
+  //     setAdDetails(result.data);
+  //   };
+  //   fetchAdDetails();
+  // }, [id]);
+  //vérifier si !adDetails return loadin, sinon return le formulaire pré rempli
   return (
     <div>
       <h2 className="ad-details-title">{adDetails?.title}</h2>
       <section className="ad-details">
         <div className="ad-details-image-container">
-          <img className="ad-details-image" src={adDetails?.picture} />
+          <img
+            className="ad-details-image"
+            src={adDetails.pictures?.[0]?.url}
+          />
         </div>
         <div className="ad-details-info">
           <div className="ad-details-price">{adDetails?.price} €</div>
@@ -51,12 +92,12 @@ const AdDetailsPage = () => {
           </a>
         </div>
         {/* ici */}
-        <Link
+        {/* <Link
           className="button"
           to={`http://localhost:5173/ad/edit/${adDetails?.id}`}
         >
           Editer l'annonce
-        </Link>
+        </Link> */}
       </section>
     </div>
   );
