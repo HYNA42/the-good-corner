@@ -34,3 +34,7 @@ class AdInput {
 }
 
 export default AdInput;
+
+/**
+ * AdInput est utilisé pour gérer les entrées lorsque le front fait une requête GraphQL.
+ */

@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom"; //useParams
 // import { useQuery } from "@apollo/client";
 // import { GET_AD_BY_ID } from "../graphql/queries";
 import { useGetAdByIdQuery } from "../generated/graphql-types";
+import Carousel from "../components/Carousel";
 
 const AdDetailsPage = () => {
   // const { id } = useParams();
@@ -31,15 +32,18 @@ const AdDetailsPage = () => {
   const adDetails = data?.getAdById;
 
   if (adDetails) {
+    const images = adDetails.pictures?.map((picture) => picture.url) || [];
     return (
       <div>
         <h2 className="ad-details-title">{adDetails?.title}</h2>
         <section className="ad-details">
           <div className="ad-details-image-container">
-            <img
+            {/* <img
               className="ad-details-image"
               src={adDetails.pictures?.[0]?.url}
-            />
+            /> */}
+            
+            <Carousel images={images} />
           </div>
           <div className="ad-details-info">
             <div className="ad-details-price">{adDetails?.price} €</div>

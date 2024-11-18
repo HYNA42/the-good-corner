@@ -13,7 +13,7 @@ import {
 import { Category } from "./Category";
 import { Tag } from "./Tag";
 import { Picture } from "./Picture";
-import {Field, ObjectType} from 'type-graphql'
+import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
@@ -48,13 +48,13 @@ export class Ad extends BaseEntity {
   createdAt: Date;
 
   //Relation Many-To-One avec la category
-  @Field(()=>Category,{ nullable: true })
-  @ManyToOne(() => Category, (category) => category.ads,{eager:true})
+  @Field(() => Category, { nullable: true })
+  @ManyToOne(() => Category, (category) => category.ads, { eager: true })
   category: Category;
 
   //Relation Many-To6Many avec les Tags
-  @Field(()=>[Tag],{ nullable: true })
-  @ManyToMany(() => Tag, (tag) => tag.ads,{
+  @Field(() => [Tag], { nullable: true })
+  @ManyToMany(() => Tag, (tag) => tag.ads, {
     cascade: true,
     eager: true,
   })
@@ -62,10 +62,14 @@ export class Ad extends BaseEntity {
   tags: Tag[];
 
   //Relation One-To-many avec la table image
-  @Field(()=>[Picture],{ nullable: true })
+  @Field(() => [Picture], { nullable: true })
   @OneToMany(() => Picture, (picture) => picture.ad, {
     cascade: true,
     eager: true,
   })
   pictures: Picture[];
 }
+
+/**
+ * Le modèle Ad est utilisé par le resolver pour interagir avec la base de données et pour renvoyer les données au front.
+ */
