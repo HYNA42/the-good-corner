@@ -4,9 +4,8 @@ export type AdCardProps = {
   id: number;
   title: string;
   price: number;
-  picture: string;
-  // category: string;
-  category: { id: number; title: string };
+  picture: string | undefined;
+  category: { id: number; title: string } | undefined | null;
   description?: string;
   owner?: string;
   createdAt?: string;

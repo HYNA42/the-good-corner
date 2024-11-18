@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Field, ID, InputType, Int } from "type-graphql";
+import { Field, InputType, Int } from "type-graphql";
 
 @InputType()
 class AdInput {
@@ -22,7 +22,7 @@ class AdInput {
   createdAt: Date;
 
   // recevoir uniquement l'ID de la catégorie et non l'objet
-  @Field(() => ID)
+  @Field(() => Int)
   categoryId: number;
 
   @Field(() => [String], { nullable: true })
