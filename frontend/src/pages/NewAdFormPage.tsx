@@ -3,31 +3,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 
-import { useQuery, gql, useMutation } from "@apollo/client";
-
-//define query => to fetch tag & category
-const GET_ALL_CATEGORY_AND_TAG = gql`
-  query GetAllTagAndCategory {
-    getAllTag {
-      id
-      name
-    }
-    getAllCategory {
-      id
-      title
-    }
-  }
-`;
-
-// define mutation => create new ad
-const POST_NEW_ADD = gql`
-  mutation CreateNewAd($data: AdInput!) {
-    createNewAd(data: $data) {
-      id
-      title
-    }
-  }
-`;
+// import { useMutation } from "@apollo/client";
+// import { GET_ALL_CATEGORY_AND_TAG } from "../graphql/queries";
+// import { CREATE_NEW_AD } from "../graphql/mutations";
+import {
+  useGetAllTagAndCategoryQuery,
+  useMutationMutation,
+} from "../generated/graphql-types";
 
 type Inputs = {
   title: string;
@@ -64,17 +46,28 @@ const NewAdFormPage = () => {
   });
 
   //useQuery for fetching categories and tags
+  // const {
+  //   loading: queryLoading,
+  //   error: queryError,
+  //   data: queryData,
+  // } = useQuery(GET_ALL_CATEGORY_AND_TAG);
+
   const {
     loading: queryLoading,
     error: queryError,
     data: queryData,
-  } = useQuery(GET_ALL_CATEGORY_AND_TAG);
+  } = useGetAllTagAndCategoryQuery();
 
   // UseMutation for crating new ad
+  // const [
+  //   createNewAd,
+  //   { data: mutationData, loading: mutationLoading, error: mutationError },
+  // ] = useMutation(CREATE_NEW_AD);
+
   const [
     createNewAd,
     { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutation(POST_NEW_ADD);
+  ] = useMutationMutation();
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     const dataForBackend = {
@@ -258,7 +251,7 @@ const NewAdFormPage = () => {
           {...register("categoryId", { required: "La catégorie est requise" })}
         >
           <option value="">Choisissez une catégorie</option>
-          {queryData.getAllCategory.map((el: any) => (
+          {queryData?.getAllCategory.map((el: any) => (
             <option key={el.id} value={el.id}>
               {el.title}
             </option>
@@ -273,7 +266,7 @@ const NewAdFormPage = () => {
       <label>
         Tags :
         <br />
-        {queryData.getAllTag.map((tag: any) => (
+        {queryData?.getAllTag.map((tag: any) => (
           <Fragment key={tag.id}>
             <label>
               <input
