@@ -5,22 +5,37 @@ import UpdateAdInput from "../inputs/UpdateAdInput";
 import { Category } from "../entities/Category";
 import { Picture } from "../entities/Picture";
 import { Tag } from "../entities/Tag";
-import { In } from "typeorm";
+import { In, Like } from "typeorm";
 
 @Resolver(() => Ad)
 class AdResolver {
   //recupère toutes les annonces
   @Query(() => [Ad])
-  async getAllAds(): Promise<Ad[]> {
+  async getAllAds(@Arg("title", { nullable: true }) title?: string) {
     // Ajout d'async et de la promesse
-    const ads = await Ad.find({
-      order: {
-        id: "DESC",
-        pictures: {
-          id: "DESC", //trier les urls des images
+    let ads: Ad[] = [];
+    if (title) {
+      ads = await Ad.find({
+        where: {
+          title: Like(`%${title}%`),
         },
-      },
-    });
+        order: {
+          id: "DESC",
+          pictures: {
+            id: "DESC", //trier les urls des images
+          },
+        },
+      });
+    } else {
+      ads = await Ad.find({
+        order: {
+          id: "DESC",
+          pictures: {
+            id: "DESC", //trier les urls des images
+          },
+        },
+      });
+    }
     // console.log(ads);
     return ads; // Retourne la liste des annonces
   }
@@ -72,16 +87,7 @@ class AdResolver {
     const result = await adToSave.save();
     return result;
   }
-
-  // modifier une annonce
-  // @Mutation(() => Ad)
-  // async updateAd(@Arg("data") updateData: UpdateAdInput) {
-  //   let adToUpdate = await Ad.findOneByOrFail({ id: updateData.id });
-  //   adToUpdate = Object.assign(adToUpdate, updateData);
-  //   const result = await adToUpdate.save();
-  //   console.log(result);
-  //   // return result
-  // }
+  
   @Mutation(() => Ad)
   async updateAd(@Arg("data") updateData: UpdateAdInput) {
     // Récupère l'annonce avec ses relations "tags", "category" et "pictures"

@@ -9,7 +9,7 @@ const RecentAds = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  console.log(data);
+  console.log("getAllAds",data?.getAllAds);
 
   if (data) {
     return (
@@ -17,7 +17,7 @@ const RecentAds = () => {
         <h2>Annonces récentes</h2>
         {/* <p>Total: {total} €</p> */}
         <section className="recent-ads">
-          {data.getAllAds.map((el) => (
+          {data.getAllAds?.map((el) => (
             <div key={el.id}>
               <AdCard
                 id={el.id}

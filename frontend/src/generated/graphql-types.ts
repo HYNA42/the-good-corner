@@ -135,6 +135,11 @@ export type QueryGetAdByIdArgs = {
 };
 
 
+export type QueryGetAllAdsArgs = {
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryGetCategoryByIdArgs = {
   id: Scalars['Float']['input'];
 };
@@ -193,7 +198,9 @@ export type DeleteAdByIdMutationVariables = Exact<{
 
 export type DeleteAdByIdMutation = { __typename?: 'Mutation', deleteAd: string };
 
-export type GetAllAdsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllAdsQueryVariables = Exact<{
+  title?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, category?: { __typename?: 'Category', id: number, title: string } | null, pictures?: Array<{ __typename?: 'Picture', id: number, url: string }> | null }> };
@@ -276,8 +283,8 @@ export type DeleteAdByIdMutationHookResult = ReturnType<typeof useDeleteAdByIdMu
 export type DeleteAdByIdMutationResult = Apollo.MutationResult<DeleteAdByIdMutation>;
 export type DeleteAdByIdMutationOptions = Apollo.BaseMutationOptions<DeleteAdByIdMutation, DeleteAdByIdMutationVariables>;
 export const GetAllAdsDocument = gql`
-    query GetAllAds {
-  getAllAds {
+    query GetAllAds($title: String) {
+  getAllAds(title: $title) {
     id
     title
     description
@@ -309,6 +316,7 @@ export const GetAllAdsDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllAdsQuery({
  *   variables: {
+ *      title: // value for 'title'
  *   },
  * });
  */

@@ -1,29 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useQuery, gql } from "@apollo/client";
+// import { useQuery, gql } from "@apollo/client";
+import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
 
 export type category = {
   id: number;
   title: string;
 };
 
-const GET_ALL_CATEGORY = gql`
-  query GetAllCategory {
-    getAllCategory {
-      id
-      title
-    }
-  }
-`;
+// const GET_ALL_CATEGORY = gql`
+//   query GetAllCategory {
+//     getAllCategory {
+//       id
+//       title
+//     }
+//   }
+// `;
 
 const Header = () => {
   const navigate = useNavigate();
 
-  const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
+  // const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
+  const { loading, error, data } = useGetAllTagAndCategoryQuery();
+  const { getAllCategory } = data || {};
+  // const { getAllCategory, getAllTag } = data || {};
+  // const {allCategories,allTags} = data;
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  console.log(data);
+  console.log("allCategories", getAllCategory);
 
   return (
     <header className="header">
@@ -44,7 +49,9 @@ const Header = () => {
             // Or you can work with it as a plain object:
             const formJson = Object.fromEntries(formData.entries());
             console.log(formJson);
-            navigate(`/ad/search/${formJson.keyword}`);
+            if (formJson.keyword) {
+              navigate(`/ad/search/${formJson.keyword}`);
+            }
           }}
           className="text-field-with-button"
         >
@@ -75,7 +82,7 @@ const Header = () => {
         </Link>
       </div>
       <nav className="categories-navigation">
-        {data.getAllCategory.map((el:any) => (
+        {getAllCategory?.map((el: any) => (
           <Link
             key={el.id}
             to={`/ad/category/${el.title}`}
