@@ -7,9 +7,11 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 // import { GET_ALL_CATEGORY_AND_TAG } from "../graphql/queries";
 // import { CREATE_NEW_AD } from "../graphql/mutations";
 import {
+  useCreateNewAddMutation,
   useGetAllTagAndCategoryQuery,
-  useMutationMutation,
+
 } from "../generated/graphql-types";
+import { GET_ALL_ADS } from "../graphql/queries";
 
 type Inputs = {
   title: string;
@@ -67,7 +69,7 @@ const NewAdFormPage = () => {
   const [
     createNewAd,
     { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useMutationMutation();
+  ] = useCreateNewAddMutation({refetchQueries:[GET_ALL_ADS]});
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     const dataForBackend = {

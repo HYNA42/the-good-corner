@@ -179,12 +179,12 @@ export type UpdateTagInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type MutationMutationVariables = Exact<{
+export type CreateNewAddMutationVariables = Exact<{
   data: AdInput;
 }>;
 
 
-export type MutationMutation = { __typename?: 'Mutation', createNewAd: { __typename?: 'Ad', id: number } };
+export type CreateNewAddMutation = { __typename?: 'Mutation', createNewAd: { __typename?: 'Ad', id: number } };
 
 export type GetAllAdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -204,39 +204,39 @@ export type GetAllTagAndCategoryQueryVariables = Exact<{ [key: string]: never; }
 export type GetAllTagAndCategoryQuery = { __typename?: 'Query', getAllTag: Array<{ __typename?: 'Tag', id: number, name: string }>, getAllCategory: Array<{ __typename?: 'Category', id: number, title: string }> };
 
 
-export const MutationDocument = gql`
-    mutation Mutation($data: AdInput!) {
+export const CreateNewAddDocument = gql`
+    mutation createNewAdd($data: AdInput!) {
   createNewAd(data: $data) {
     id
   }
 }
     `;
-export type MutationMutationFn = Apollo.MutationFunction<MutationMutation, MutationMutationVariables>;
+export type CreateNewAddMutationFn = Apollo.MutationFunction<CreateNewAddMutation, CreateNewAddMutationVariables>;
 
 /**
- * __useMutationMutation__
+ * __useCreateNewAddMutation__
  *
- * To run a mutation, you first call `useMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateNewAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewAddMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [mutationMutation, { data, loading, error }] = useMutationMutation({
+ * const [createNewAddMutation, { data, loading, error }] = useCreateNewAddMutation({
  *   variables: {
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useMutationMutation(baseOptions?: Apollo.MutationHookOptions<MutationMutation, MutationMutationVariables>) {
+export function useCreateNewAddMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewAddMutation, CreateNewAddMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<MutationMutation, MutationMutationVariables>(MutationDocument, options);
+        return Apollo.useMutation<CreateNewAddMutation, CreateNewAddMutationVariables>(CreateNewAddDocument, options);
       }
-export type MutationMutationHookResult = ReturnType<typeof useMutationMutation>;
-export type MutationMutationResult = Apollo.MutationResult<MutationMutation>;
-export type MutationMutationOptions = Apollo.BaseMutationOptions<MutationMutation, MutationMutationVariables>;
+export type CreateNewAddMutationHookResult = ReturnType<typeof useCreateNewAddMutation>;
+export type CreateNewAddMutationResult = Apollo.MutationResult<CreateNewAddMutation>;
+export type CreateNewAddMutationOptions = Apollo.BaseMutationOptions<CreateNewAddMutation, CreateNewAddMutationVariables>;
 export const GetAllAdsDocument = gql`
     query GetAllAds {
   getAllAds {
