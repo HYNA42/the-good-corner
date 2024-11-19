@@ -16,6 +16,9 @@ class AdResolver {
     const ads = await Ad.find({
       order: {
         id: "DESC",
+        pictures: {
+          id: "DESC", //trier les urls des images
+        },
       },
     });
     // console.log(ads);
@@ -25,7 +28,14 @@ class AdResolver {
   //récupère une annonce en fonction de son id
   @Query(() => Ad)
   async getAdById(@Arg("id") id: number) {
-    const ad = await Ad.findOneByOrFail({ id: id });
+    const ad = await Ad.findOne({
+      where: { id: id },
+      order: { pictures: { id: "DESC" } }, //trier les url des images
+    });
+    if (ad === null) {
+      throw new Error("Cannot find ad with id " + id);
+    }
+
     return ad;
   }
 

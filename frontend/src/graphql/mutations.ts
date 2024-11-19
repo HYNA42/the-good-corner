@@ -8,3 +8,9 @@ export const CREATE_NEW_AD = gql`
     }
   }
 `;
+
+export const DELETE_AD_BY_ID = gql`
+  mutation DeleteAdById($deleteAdId: Float!) {
+    deleteAd(id: $deleteAdId)
+  }
+`;

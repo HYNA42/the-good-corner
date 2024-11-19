@@ -1,35 +1,38 @@
 // import axios from "axios";
 // import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"; //useParams
+import { Link, useNavigate, useParams } from "react-router-dom"; //useParams
 // import { AdCardProps } from "../components/AdCard";
 
 // import { useQuery } from "@apollo/client";
 // import { GET_AD_BY_ID } from "../graphql/queries";
-import { useGetAdByIdQuery } from "../generated/graphql-types";
+import { useDeleteAdByIdMutation, useGetAdByIdQuery } from "../generated/graphql-types";
 import Carousel from "../components/Carousel";
+import { GET_ALL_ADS } from "../graphql/queries";
 
 const AdDetailsPage = () => {
-  // const { id } = useParams();
-  const { id } = useParams<{ id?: string }>();
-  const parsedId = parseInt(id || "0", 10);
-  console.log("id", id, "parsedId", parsedId);
+  const navigate = useNavigate()
+  const { id } = useParams();
+  const[deleteAdById] = useDeleteAdByIdMutation()
+  // const { id } = useParams<{ id?: string }>();
+  // const parsedId = parseInt(id || "0", 10);
+  // console.log("id", id, "parsedId", parsedId);
 
   // const { loading, error, data } = useQuery(GET_AD_BY_ID, {
   //   variables: { getAdByIdId: parsedId }, // Convertir l'ID en entier
   // });
 
   const { loading, error, data } = useGetAdByIdQuery({
-    variables: { getAdByIdId: parsedId },
+    variables: { getAdByIdId: parseInt(id as string) },
   });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-
-  console.log("loading", loading);
-  console.log("error", error);
-  console.log("data", data);
-
   const adDetails = data?.getAdById;
+
+  // console.log("loading", loading);
+  // console.log("error", error);
+  // console.log("data", navigate);
+
 
   if (adDetails) {
     const images = adDetails.pictures?.map((picture) => picture.url) || [];
@@ -78,10 +81,25 @@ const AdDetailsPage = () => {
           {/* ici */}
           <Link
             className="button"
-            to={`http://localhost:5173/ad/edit/${adDetails?.id}`}
+            to={`/ad/edit/${id}`}
           >
             Editer l'annonce
           </Link>
+          <button
+              onClick={async () => {
+                console.log("delete ad with id", id);
+                if (id) {
+                  await deleteAdById({
+                    variables: { deleteAdId: parseInt(id) },
+                    refetchQueries: [GET_ALL_ADS],
+                    awaitRefetchQueries: true,
+                  });
+                  navigate("/");
+                }
+              }}
+            >
+              Supprimer l'annonce
+            </button>
         </section>
       </div>
     );
