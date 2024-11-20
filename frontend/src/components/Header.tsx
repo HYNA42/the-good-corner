@@ -1,7 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 // import { useQuery, gql } from "@apollo/client";
-import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
+import {
+ 
+  useGetAllTagAndCategoryQuery,
+} from "../generated/graphql-types";
 
 export type category = {
   id: number;
@@ -19,12 +23,14 @@ export type category = {
 
 const Header = () => {
   const navigate = useNavigate();
-
   // const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
-  const { loading, error, data } = useGetAllTagAndCategoryQuery();
-  const { getAllCategory } = data || {};
   // const { getAllCategory, getAllTag } = data || {};
   // const {allCategories,allTags} = data;
+  const { loading, error, data } = useGetAllTagAndCategoryQuery();
+  const { getAllCategory } = data || {};
+  //pour créer un lien avec notre input (pour le nettoyer si keyword invalide)
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -48,14 +54,17 @@ const Header = () => {
 
             // Or you can work with it as a plain object:
             const formJson = Object.fromEntries(formData.entries());
-            console.log(formJson);
-            if (formJson.keyword) {
+            const keyword = formJson.keyword?.toString().trim();
+            console.log(keyword);
+
+            if (keyword) {
               navigate(`/ad/search/${formJson.keyword}`);
             }
           }}
           className="text-field-with-button"
         >
           <input
+            ref={searchInputRef}
             className="text-field main-search-field"
             type="search"
             name="keyword"

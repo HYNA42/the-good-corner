@@ -1,19 +1,33 @@
 // import axios from "axios";
 // import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdCard from "../components/AdCard";
 import { useGetAllAdsQuery } from "../generated/graphql-types";
+import { useEffect } from "react";
 
 const AdSearchPage = () => {
+  const navigate = useNavigate();
   const { keyword } = useParams();
 
   const { loading, error, data } = useGetAllAdsQuery({
     variables: { title: keyword },
   });
+  const ads = data?.getAllAds;
+  useEffect(() => {
+    if (!loading && !ads?.length) {
+      //Réinitialiser de l'input de recherche
+      const searchInputRef =
+        document.querySelector<HTMLInputElement>(".main-search-field");
+      if (searchInputRef) {
+        searchInputRef.value = "";
+      }
+      navigate("/"); // Redirige vers la page d'accueil
+    }
+  }, [ads, loading, navigate]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  const ads = data?.getAllAds;
+
   console.log("allads from searchPage", ads);
 
   // const [ads, setAds] = useState<AdCardProps[]>([]);
