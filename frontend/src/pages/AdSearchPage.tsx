@@ -20,6 +20,7 @@ const AdSearchPage = () => {
         document.querySelector<HTMLInputElement>(".main-search-field");
       if (searchInputRef) {
         searchInputRef.value = "";
+        searchInputRef.focus();
       }
       navigate("/"); // Redirige vers la page d'accueil
     }

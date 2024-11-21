@@ -9,7 +9,6 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import {
   useCreateNewAddMutation,
   useGetAllTagAndCategoryQuery,
-
 } from "../generated/graphql-types";
 import { GET_ALL_ADS } from "../graphql/queries";
 
@@ -19,7 +18,7 @@ type Inputs = {
   owner: string;
   price: number;
   location: string;
-  createdAt: Date;
+  createdAt: string;
   categoryId: number; // Remplacer "category" par "categoryId"
   pictures: { url: string }[]; // Garder "pictures" pour le formulaire
   picturesUrls: string[]; // Correspond à "picturesUrls" attendu par l'API
@@ -33,18 +32,37 @@ type Inputs = {
 
 const NewAdFormPage = () => {
   const navigate = useNavigate();
+  //valeurs par défaut
+  const defaultValues: Inputs = {
+    title: "Titre par défaut",
+    description: "Description par défaut",
+    owner: "Vendeur par défaut",
+    price: 100,
+    location: "Ville par défaut",
+    createdAt: new Date().toISOString().slice(0, 10),
+    categoryId: 1, // ID de catégorie par défaut
+    pictures: [
+      {
+        url: "https://imgs.search.brave.com/l42u6JY0hdN597WLLpEIPyF6t0uEAzxKiIVRofRJAjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzkzLzBi/L2RjLzkzMGJkY2E1/MTM0ZjZjMmQwMDE4/ZWJmMTM5YTdiZGIy/LmpwZw",
+      },
+    ],
+    picturesUrls: [],
+    tagIds: [11], // Pas de tags par défaut
+  };
+
   // Setup form validation with React Hook Form
   const {
     register,
     control, // for useFieldArray
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ criteriaMode: "all" });
+  } = useForm<Inputs>({ criteriaMode: "all", defaultValues });
 
   // useFieldArray to manage dynamic picture inputs
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "pictures", // managing pictures array
+    name: "pictures",
+    // managing pictures array
   });
 
   //useQuery for fetching categories and tags
@@ -69,7 +87,7 @@ const NewAdFormPage = () => {
   const [
     createNewAd,
     { data: mutationData, loading: mutationLoading, error: mutationError },
-  ] = useCreateNewAddMutation({refetchQueries:[GET_ALL_ADS]});
+  ] = useCreateNewAddMutation({ refetchQueries: [GET_ALL_ADS] });
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     const dataForBackend = {
@@ -85,7 +103,6 @@ const NewAdFormPage = () => {
     };
 
     console.log("Payload sent to backend:", dataForBackend);
-
     try {
       // await axios.post("http://localhost:3000/ads", dataForBackend);
       await createNewAd({ variables: { data: dataForBackend } });
@@ -275,6 +292,7 @@ const NewAdFormPage = () => {
                 type="checkbox"
                 value={tag.id}
                 {...register("tagIds", { required: "Un tag est requis" })}
+                defaultChecked={defaultValues.tagIds.includes(tag.id)}
               />
               {tag.name}
             </label>
