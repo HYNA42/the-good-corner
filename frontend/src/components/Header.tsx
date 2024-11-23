@@ -2,10 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 // import { useQuery, gql } from "@apollo/client";
-import {
- 
-  useGetAllTagAndCategoryQuery,
-} from "../generated/graphql-types";
+import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
 
 export type category = {
   id: number;
@@ -30,11 +27,10 @@ const Header = () => {
   const { getAllCategory } = data || {};
   //pour créer un lien avec notre input (pour le nettoyer si keyword invalide)
   const searchInputRef = useRef<HTMLInputElement>(null);
-  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  console.log("allCategories", getAllCategory);
+  // console.log("allCategories", getAllCategory);
 
   return (
     <header className="header">

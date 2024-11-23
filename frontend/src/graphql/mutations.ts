@@ -14,3 +14,28 @@ export const DELETE_AD_BY_ID = gql`
     deleteAd(id: $deleteAdId)
   }
 `;
+
+export const UPDATE_AD = gql`
+  mutation UpdateAd($data: UpdateAdInput!) {
+    updateAd(data: $data) {
+      id
+      title
+      description
+      owner
+      price
+      location
+      createdAt
+      category {
+        id
+        title
+      }
+      pictures {
+        url
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+`;

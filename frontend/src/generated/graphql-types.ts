@@ -198,19 +198,26 @@ export type DeleteAdByIdMutationVariables = Exact<{
 
 export type DeleteAdByIdMutation = { __typename?: 'Mutation', deleteAd: string };
 
+export type UpdateAdMutationVariables = Exact<{
+  data: UpdateAdInput;
+}>;
+
+
+export type UpdateAdMutation = { __typename?: 'Mutation', updateAd: { __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, category?: { __typename?: 'Category', id: number, title: string } | null, pictures?: Array<{ __typename?: 'Picture', url: string }> | null, tags?: Array<{ __typename?: 'Tag', id: number, name: string }> | null } };
+
 export type GetAllAdsQueryVariables = Exact<{
   title?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, category?: { __typename?: 'Category', id: number, title: string } | null, pictures?: Array<{ __typename?: 'Picture', id: number, url: string }> | null }> };
+export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, category?: { __typename?: 'Category', id: number, title: string } | null, pictures?: Array<{ __typename?: 'Picture', id: number, url: string }> | null, tags?: Array<{ __typename?: 'Tag', id: number, name: string }> | null }> };
 
 export type GetAdByIdQueryVariables = Exact<{
   getAdByIdId: Scalars['Float']['input'];
 }>;
 
 
-export type GetAdByIdQuery = { __typename?: 'Query', getAdById: { __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, pictures?: Array<{ __typename?: 'Picture', id: number, url: string }> | null, category?: { __typename?: 'Category', id: number, title: string } | null } };
+export type GetAdByIdQuery = { __typename?: 'Query', getAdById: { __typename?: 'Ad', id: number, title: string, description: string, owner: string, price: number, location: string, createdAt: any, pictures?: Array<{ __typename?: 'Picture', id: number, url: string }> | null, category?: { __typename?: 'Category', id: number, title: string } | null, tags?: Array<{ __typename?: 'Tag', id: number }> | null } };
 
 export type GetAllTagAndCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -282,6 +289,56 @@ export function useDeleteAdByIdMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteAdByIdMutationHookResult = ReturnType<typeof useDeleteAdByIdMutation>;
 export type DeleteAdByIdMutationResult = Apollo.MutationResult<DeleteAdByIdMutation>;
 export type DeleteAdByIdMutationOptions = Apollo.BaseMutationOptions<DeleteAdByIdMutation, DeleteAdByIdMutationVariables>;
+export const UpdateAdDocument = gql`
+    mutation UpdateAd($data: UpdateAdInput!) {
+  updateAd(data: $data) {
+    id
+    title
+    description
+    owner
+    price
+    location
+    createdAt
+    category {
+      id
+      title
+    }
+    pictures {
+      url
+    }
+    tags {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateAdMutationFn = Apollo.MutationFunction<UpdateAdMutation, UpdateAdMutationVariables>;
+
+/**
+ * __useUpdateAdMutation__
+ *
+ * To run a mutation, you first call `useUpdateAdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAdMutation, { data, loading, error }] = useUpdateAdMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateAdMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAdMutation, UpdateAdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAdMutation, UpdateAdMutationVariables>(UpdateAdDocument, options);
+      }
+export type UpdateAdMutationHookResult = ReturnType<typeof useUpdateAdMutation>;
+export type UpdateAdMutationResult = Apollo.MutationResult<UpdateAdMutation>;
+export type UpdateAdMutationOptions = Apollo.BaseMutationOptions<UpdateAdMutation, UpdateAdMutationVariables>;
 export const GetAllAdsDocument = gql`
     query GetAllAds($title: String) {
   getAllAds(title: $title) {
@@ -299,6 +356,10 @@ export const GetAllAdsDocument = gql`
     pictures {
       id
       url
+    }
+    tags {
+      id
+      name
     }
   }
 }
@@ -353,6 +414,9 @@ export const GetAdByIdDocument = gql`
     category {
       id
       title
+    }
+    tags {
+      id
     }
   }
 }

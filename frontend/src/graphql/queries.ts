@@ -18,6 +18,10 @@ export const GET_ALL_ADS = gql`
         id
         url
       }
+      tags {
+        id
+        name
+      }
     }
   }
 `;
@@ -39,6 +43,9 @@ export const GET_AD_BY_ID = gql`
       category {
         id
         title
+      }
+      tags {
+        id
       }
     }
   }
