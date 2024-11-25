@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetAdByIdQuery,
   useGetAllTagAndCategoryQuery,
@@ -24,6 +24,7 @@ type Inputs = {
 };
 
 const AdUpdatePage = () => {
+  const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const idForBack = Number(params.id);
 
@@ -83,12 +84,12 @@ const AdUpdatePage = () => {
         location: adDetails.location || "",
         createdAt: adDetails.createdAt?.slice(0, 10) || "",
         categoryId: adDetails.category?.id || 0,
-        picturesUrls: adDetails.pictures?.map((pic) => ({ url: pic.url })) || [],
+        picturesUrls:
+          adDetails.pictures?.map((pic) => ({ url: pic.url })) || [],
         tagIds: adDetails.tags?.map((tag) => tag.id) || [],
       });
     }
   }, [adDetails, idForBack, reset]);
-
 
   const onSubmit: SubmitHandler<Inputs> = async (formData) => {
     console.log("Form submitted with:", formData);
@@ -109,6 +110,7 @@ const AdUpdatePage = () => {
     try {
       await updateAdMutation({ variables: { data: dataForBackend } });
       toast.success("Ad has been updated");
+      navigate("/");
     } catch (error) {
       console.log("Error updating ad:", error);
       toast.error(
@@ -293,7 +295,9 @@ const AdUpdatePage = () => {
                   type="checkbox"
                   value={tag.id}
                   {...register("tagIds", { required: "Un tag est requis" })}
-                  defaultChecked={adDetails?.tags?.some((adTag) => adTag.id === tag.id)}
+                  defaultChecked={adDetails?.tags?.some(
+                    (adTag) => adTag.id === tag.id
+                  )}
                 />
                 {tag.name}
               </label>
@@ -308,8 +312,8 @@ const AdUpdatePage = () => {
         </label>
 
         <br />
-        <button className="button" type="submit">
-          Submit
+        <button className="btn-submitAd" type="submit">
+          Modifier l'annonce
         </button>
       </form>
     </>
