@@ -305,8 +305,8 @@ const NewAdFormPage = () => {
       </label>
 
       <br />
-      <button className="button" type="submit">
-        Submit
+      <button className="btn-submitAd" type="submit">
+        Créer une annonce
       </button>
     </form>
   );
