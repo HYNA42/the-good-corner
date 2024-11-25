@@ -52,6 +52,16 @@ const AdDetailsPage = () => {
           </div>
           <div className="ad-details-info">
             <div className="ad-details-price">{adDetails?.price} €</div>
+            <hr className="separator" />
+            <div className="tags">
+              {adDetails.tags?.map((tag) => (
+                <span key={tag.id} className="tag-badge">
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+
+            <hr className="separator" />
             <div className="ad-details-description">
               {adDetails?.description}
             </div>

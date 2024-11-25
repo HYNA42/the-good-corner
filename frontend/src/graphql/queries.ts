@@ -46,6 +46,7 @@ export const GET_AD_BY_ID = gql`
       }
       tags {
         id
+        name
       }
     }
   }

@@ -28,7 +28,7 @@ function App() {
 
           {/* routes unused */}
           <Route path="ad/category/:keyword" element={<AdsByCategoryPage />} />
-          <Route path="ad/edit/:id" element={<EditAd />} />
+          {/* <Route path="ad/edit/:id" element={<EditAd />} /> */}
           <Route path="category/new" element={<NewCategoryFormPage />} />
         </Route>
       </Routes>
