@@ -1,4 +1,8 @@
-import { useGetAllAdsQuery } from "../generated/graphql-types";
+import {
+  useDeleteAdByIdMutation,
+  useGetAllAdsQuery,
+} from "../generated/graphql-types";
+import { GET_ALL_ADS } from "../graphql/queries";
 // import { GET_ALL_ADS } from "../graphql/queries";
 import AdCard from "./AdCard";
 // import { useQuery } from "@apollo/client";
@@ -7,9 +11,11 @@ const RecentAds = () => {
   // const { loading, error, data } = useQuery(GET_ALL_ADS);
   const { loading, error, data } = useGetAllAdsQuery();
 
+  const [deleteAdById] = useDeleteAdByIdMutation();
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  console.log("getAllAds",data?.getAllAds);
+  console.log("getAllAds", data?.getAllAds);
 
   if (data) {
     return (
@@ -26,27 +32,21 @@ const RecentAds = () => {
                 price={el.price}
                 category={el.category}
               />
-              {/* <button
-                onClick={() => {
-                  setTotal(total + el.price);
+              <button
+                className="button btn-delete"
+                onClick={async () => {
+                  console.log("deleting ad with", el.id);
+                  if (el.id) {
+                    await deleteAdById({
+                      variables: { deleteAdId: el.id },
+                      refetchQueries:[GET_ALL_ADS],
+                      awaitRefetchQueries: true,
+                    });
+                  }
                 }}
               >
-                Add to total
-              </button> */}
-              {/* <button
-                onClick={() => {
-                  axios.delete(`http://localhost:3000/ads/${el.id}`);
-                }}
-              >
-                Delete
-              </button> */}
-
-              {/* <Link
-                className="button"
-                to={`http://localhost:5173/ad/edit/${ads?.id}`}
-              >
-                Editer l'annonce
-              </Link> */}
+                Supprimer
+              </button>
             </div>
           ))}
         </section>
