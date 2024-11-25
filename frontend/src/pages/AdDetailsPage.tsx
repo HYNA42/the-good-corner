@@ -5,14 +5,17 @@ import { Link, useNavigate, useParams } from "react-router-dom"; //useParams
 
 // import { useQuery } from "@apollo/client";
 // import { GET_AD_BY_ID } from "../graphql/queries";
-import { useDeleteAdByIdMutation, useGetAdByIdQuery } from "../generated/graphql-types";
+import {
+  useDeleteAdByIdMutation,
+  useGetAdByIdQuery,
+} from "../generated/graphql-types";
 import Carousel from "../components/Carousel";
 import { GET_ALL_ADS } from "../graphql/queries";
 
 const AdDetailsPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
-  const[deleteAdById] = useDeleteAdByIdMutation()
+  const [deleteAdById] = useDeleteAdByIdMutation();
   // const { id } = useParams<{ id?: string }>();
   // const parsedId = parseInt(id || "0", 10);
   // console.log("id", id, "parsedId", parsedId);
@@ -33,7 +36,6 @@ const AdDetailsPage = () => {
   // console.log("error", error);
   // console.log("data", navigate);
 
-
   if (adDetails) {
     const images = adDetails.pictures?.map((picture) => picture.url) || [];
     return (
@@ -45,7 +47,7 @@ const AdDetailsPage = () => {
               className="ad-details-image"
               src={adDetails.pictures?.[0]?.url}
             /> */}
-            
+
             <Carousel images={images} />
           </div>
           <div className="ad-details-info">
@@ -77,15 +79,8 @@ const AdDetailsPage = () => {
               </svg>
               Envoyer un email
             </a>
-          </div>
-          {/* ici */}
-          <Link
-            className="button"
-            to={`/ad/edit/${id}`}
-          >
-            Editer l'annonce
-          </Link>
-          <button
+            <button
+              className="button btn-delete"
               onClick={async () => {
                 console.log("delete ad with id", id);
                 if (id) {
@@ -100,6 +95,10 @@ const AdDetailsPage = () => {
             >
               Supprimer l'annonce
             </button>
+          </div>
+          <Link className="button" to={`/ad/update/${id}`}>
+            Editer l'annonce
+          </Link>
         </section>
       </div>
     );
