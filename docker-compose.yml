@@ -8,12 +8,20 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=the_good_corner
+    depends_on:
+      database:
+        condition: service_healthy
     healthcheck:
       test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
       interval: 1s
       timeout: 2s
       retries: 100
+
   frontend:
     build: ./frontend
     ports:
@@ -26,3 +34,22 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: the_good_corner
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
