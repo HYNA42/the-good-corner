@@ -8,19 +8,21 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-      - POSTGRES_HOST=database
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=the_good_corner
+      # - POSTGRES_HOST=db
+      # - POSTGRES_PORT=5432
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=password
+      # - POSTGRES_DB=the_good_corner
     depends_on:
-      database:
+      db:
         condition: service_healthy
     healthcheck:
       test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
       interval: 1s
       timeout: 2s
       retries: 100
+    env_file:
+      - .env # On utilise directement le fichier .env pour éviter de répéter les variables
 
   frontend:
     build: ./frontend
@@ -35,7 +37,7 @@ services:
       backend:
         condition: service_healthy
 
-  database:
+  db:
     image: postgres:latest
     ports:
       - 5432:5432
@@ -51,5 +53,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
 volumes:
   postgres_data:
+  
