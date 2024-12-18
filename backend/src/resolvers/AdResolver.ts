@@ -5,39 +5,36 @@ import UpdateAdInput from "../inputs/UpdateAdInput";
 import { Category } from "../entities/Category";
 import { Picture } from "../entities/Picture";
 import { Tag } from "../entities/Tag";
-import { In, Like } from "typeorm";
+import { FindManyOptions, In, Like } from "typeorm";
 
 @Resolver(() => Ad)
 class AdResolver {
   //recupère toutes les annonces
   @Query(() => [Ad])
-  async getAllAds(@Arg("title", { nullable: true }) title?: string) {
-    // Ajout d'async et de la promesse
+  async getAllAds(
+    @Arg("title", { nullable: true }) title?: string,
+    @Arg("category", { nullable: true }) category?: string
+  ) {
     let ads: Ad[] = [];
+    let findOptions: FindManyOptions<Ad> = {
+      order: {
+        id: "DESC",
+        pictures: {
+          id: "DESC",
+        },
+      },
+    };
     if (title) {
-      ads = await Ad.find({
-        where: {
-          title: Like(`%${title}%`),
-        },
-        order: {
-          id: "DESC",
-          pictures: {
-            id: "DESC", //trier les urls des images
-          },
-        },
-      });
-    } else {
-      ads = await Ad.find({
-        order: {
-          id: "DESC",
-          pictures: {
-            id: "DESC", //trier les urls des images
-          },
-        },
-      });
+      findOptions = { ...findOptions, where: { title: Like(`%${title}%`) } };
     }
-    // console.log(ads);
-    return ads; // Retourne la liste des annonces
+    if (category) {
+      findOptions = {
+        ...findOptions,
+        where: { category: { title: category } },
+      };
+    }
+    ads = await Ad.find(findOptions);
+    return ads;
   }
 
   //récupère une annonce en fonction de son id
@@ -87,7 +84,7 @@ class AdResolver {
     const result = await adToSave.save();
     return result;
   }
-  
+
   @Mutation(() => Ad)
   async updateAd(@Arg("data") updateData: UpdateAdInput) {
     // Récupère l'annonce avec ses relations "tags", "category" et "pictures"

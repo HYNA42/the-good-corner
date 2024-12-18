@@ -136,6 +136,7 @@ export type QueryGetAdByIdArgs = {
 
 
 export type QueryGetAllAdsArgs = {
+  category?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -207,6 +208,7 @@ export type UpdateAdMutation = { __typename?: 'Mutation', updateAd: { __typename
 
 export type GetAllAdsQueryVariables = Exact<{
   title?: InputMaybe<Scalars['String']['input']>;
+  category?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -340,8 +342,8 @@ export type UpdateAdMutationHookResult = ReturnType<typeof useUpdateAdMutation>;
 export type UpdateAdMutationResult = Apollo.MutationResult<UpdateAdMutation>;
 export type UpdateAdMutationOptions = Apollo.BaseMutationOptions<UpdateAdMutation, UpdateAdMutationVariables>;
 export const GetAllAdsDocument = gql`
-    query GetAllAds($title: String) {
-  getAllAds(title: $title) {
+    query GetAllAds($title: String, $category: String) {
+  getAllAds(title: $title, category: $category) {
     id
     title
     description
@@ -378,6 +380,7 @@ export const GetAllAdsDocument = gql`
  * const { data, loading, error } = useGetAllAdsQuery({
  *   variables: {
  *      title: // value for 'title'
+ *      category: // value for 'category'
  *   },
  * });
  */

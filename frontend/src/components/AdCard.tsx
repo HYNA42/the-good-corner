@@ -4,17 +4,17 @@ export type AdCardProps = {
   id: number;
   title: string;
   price: number;
-  picture: string | undefined;
+  pictures: string[]|undefined
   category: { id: number; title: string } | undefined | null;
   description?: string;
   owner?: string;
   createdAt?: string;
 };
 
-const AdCard = ({ title, price, picture, category, id }: AdCardProps) => (
+const AdCard = ({ title, price, pictures, category, id }: AdCardProps) => (
   <div className="ad-card-container">
     <Link className="ad-card-link" to={`/ad/${id}`}>
-      <img className="ad-card-image" src={picture} />
+      <img className="ad-card-image" src={pictures?.at(0)} />
       <div className="ad-card-text">
         <div className="ad-card-title">{title}</div>
         <div className="ad-card-price">{price} €</div>
