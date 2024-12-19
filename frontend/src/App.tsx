@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import des styles de Toastify
 import AdUpdatePage from "./pages/AdUpdatePage";
 import AdsByTitlePage from "./pages/AdSearchPage";
 import AdSearchPage from "./pages/AdSearchPage";
+import SingleFileUploader from "./pages/TestFileUpload";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
           <Route path="ad/category/:keyword" element={<AdsByCategoryPage />} />
           {/* <Route path="ad/edit/:id" element={<EditAd />} /> */}
           <Route path="category/new" element={<NewCategoryFormPage />} />
+
+          <Route path="testimg" element={<SingleFileUploader />} />
         </Route>
       </Routes>
       <ToastContainer theme="colored" />
