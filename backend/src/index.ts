@@ -30,3 +30,9 @@ const start = async () => {
 };
 
 start();
+
+// server: {
+//   watch: {
+//     usePolling: true
+//   }
+// }
