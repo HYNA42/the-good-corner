@@ -5,7 +5,7 @@ import UpdateAdInput from "../inputs/UpdateAdInput";
 import { Category } from "../entities/Category";
 import { Picture } from "../entities/Picture";
 import { Tag } from "../entities/Tag";
-import { FindManyOptions, In, Like } from "typeorm";
+import { FindManyOptions, ILike, In } from "typeorm";
 
 @Resolver(() => Ad)
 class AdResolver {
@@ -25,7 +25,7 @@ class AdResolver {
       },
     };
     if (title) {
-      findOptions = { ...findOptions, where: { title: Like(`%${title}%`) } };
+      findOptions = { ...findOptions, where: { title: ILike(`%${title}%`) } };
     }
     if (category) {
       findOptions = {

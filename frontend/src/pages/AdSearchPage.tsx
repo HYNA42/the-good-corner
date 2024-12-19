@@ -1,58 +1,31 @@
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import AdCard from "../components/AdCard";
+import { useSearchParams } from "react-router-dom";
 import { useGetAllAdsQuery } from "../generated/graphql-types";
-import { useEffect } from "react";
+import AdCard from "../components/AdCard";
 
-const AdSearchPage = () => {
-  const navigate = useNavigate();
-  const { keyword } = useParams();
+const AdsByTitlePage = () => {
+  const [searchParams] = useSearchParams();
+  const title = searchParams.get("title");
 
-  const { loading, error, data } = useGetAllAdsQuery({
-    variables: { title: keyword },
+  const { data, loading, error } = useGetAllAdsQuery({
+    variables: {
+      title: title,
+    },
   });
-  const ads = data?.getAllAds;
-  useEffect(() => {
-    if (!loading && !ads?.length) {
-      //Réinitialiser de l'input de recherche
-      const searchInputRef =
-        document.querySelector<HTMLInputElement>(".main-search-field");
-      if (searchInputRef) {
-        searchInputRef.value = "";
-        searchInputRef.focus();
-      }
-      navigate("/"); // Redirige vers la page d'accueil
-    }
-  }, [ads, loading, navigate]);
-
+  console.log("adsBy title ==>", data?.getAllAds);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  console.log("allads from searchPage", ads);
-
-  // const [ads, setAds] = useState<AdCardProps[]>([]);
-  // useEffect(() => {
-  //   const fetchAdsForKeyword = async () => {
-  //     const result = await axios.get(
-  //       `http://localhost:3000/ads?title=${keyword}`
-  //     );
-  //     console.log("result", result);
-  //     setAds(result.data);
-  //   };
-  //   fetchAdsForKeyword();
-  // }, [keyword]);
-
-  return (
-    <div>
-      <h2>Search results for keyword: {keyword}</h2>
+  if (data?.getAllAds)
+    return (
+      <div>
+      <h2>Search results for category: {title}</h2>
       <section className="recent-ads">
-        {ads?.map((el) => (
-          <div key={el.id}>
+        {data.getAllAds.map((el) => (
+          <div key={el.title}>
             <AdCard
               id={el.id}
               title={el.title}
-              picture={el.pictures?.at(0)?.url}
+              pictures={el.pictures?.map(pic=>pic.url)}
               price={el.price}
               category={el.category}
             />
@@ -60,7 +33,7 @@ const AdSearchPage = () => {
         ))}
       </section>
     </div>
-  );
+    );
 };
 
-export default AdSearchPage;
+export default AdsByTitlePage;

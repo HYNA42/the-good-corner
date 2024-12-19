@@ -6,13 +6,12 @@ import AboutPage from "./pages/AboutPage";
 import AdDetailsPage from "./pages/AdDetailsPage";
 import NewAdFormPage from "./pages/NewAdFormPage";
 import NewCategoryFormPage from "./pages/NewCategoryFormPage";
-import AdSearchPage from "./pages/AdSearchPage";
 import AdsByCategoryPage from "./pages/AdsByCategoryPage";
-// import EditAd from "./pages/EditAd";
 import { ToastContainer } from "react-toastify"; // Import du ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import des styles de Toastify
 import AdUpdatePage from "./pages/AdUpdatePage";
-// import AdSearchPage from "./pages/AdSearchPage";
+import AdsByTitlePage from "./pages/AdSearchPage";
+import AdSearchPage from "./pages/AdSearchPage";
 
 function App() {
   return (
@@ -23,8 +22,9 @@ function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="ad/new" element={<NewAdFormPage />} />
           <Route path="ad/:id" element={<AdDetailsPage />} />
-          <Route path="ad/search/:keyword" element={<AdSearchPage />} />
+          <Route path="ad/search/:title" element={<AdSearchPage />} />
           <Route path="ad/update/:id" element={<AdUpdatePage />} />
+          <Route path="ad/search" element={<AdsByTitlePage />} />
 
           {/* routes unused */}
           <Route path="ad/category/:keyword" element={<AdsByCategoryPage />} />

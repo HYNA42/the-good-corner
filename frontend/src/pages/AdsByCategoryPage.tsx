@@ -1,24 +1,11 @@
-// import axios from "axios";
-// import { useEffect, useState } from "react";
+
 import { useParams } from "react-router-dom";
-// import AdCard, { AdCardProps } from "../components/AdCard";
 import AdCard from "../components/AdCard";
 import { useGetAllAdsQuery } from "../generated/graphql-types";
 
 const AdsByCategoryPage = () => {
   const { keyword } = useParams();
-  // const [ads, setAds] = useState<AdCardProps[]>([]);
-  // useEffect(() => {
-  //   const fetchAdsForCategory = async () => {
-  //     const result = await axios.get(
-  //       `http://localhost:3000/ads/category/${keyword}`
-  //     );
-  //     console.log("result", result);
-  //     setAds(result.data);
-  //   };
-  //   fetchAdsForCategory();
-  // }, [keyword]);
-
+ 
   const { data, loading, error } = useGetAllAdsQuery({
     variables: {
       category:keyword

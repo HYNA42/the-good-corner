@@ -1,36 +1,47 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
-// import { useQuery, gql } from "@apollo/client";
-import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
+import React, { useRef, useState } from "react";
+
+import {
+  useGetAllAdsLazyQuery,
+  useGetAllTagAndCategoryQuery,
+} from "../generated/graphql-types";
 
 export type category = {
   id: number;
   title: string;
 };
 
-// const GET_ALL_CATEGORY = gql`
-//   query GetAllCategory {
-//     getAllCategory {
-//       id
-//       title
-//     }
-//   }
-// `;
-
 const Header = () => {
   const navigate = useNavigate();
-  // const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
-  // const { getAllCategory, getAllTag } = data || {};
-  // const {allCategories,allTags} = data;
+  //state pour stocker le keyword
+  const [searchValue, setSearchValue] = useState("");
   const { loading, error, data } = useGetAllTagAndCategoryQuery();
   const { getAllCategory } = data || {};
-  //pour créer un lien avec notre input (pour le nettoyer si keyword invalide)
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [getAllAdsByTitle] = useGetAllAdsLazyQuery();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("keyword  ===> ", searchValue);
+    if (searchValue) {
+      const res = await getAllAdsByTitle({ variables: { title: searchValue } });
+      if (res.data?.getAllAds.length) {
+        console.log("adDataByTitle ==>", res.data.getAllAds);
+        navigate(`/ad/search?title=${searchValue}`);
+      } else {
+        console.log("no macth");
+        setSearchValue("");
+      }
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  // console.log("allCategories", getAllCategory);
 
   return (
     <header className="header">
@@ -41,29 +52,14 @@ const Header = () => {
             <span className="desktop-long-label">THE GOOD CORNER</span>
           </Link>
         </h1>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            // Read the form data
-            const form = e.target;
-            const formData = new FormData(form as HTMLFormElement);
-
-            // Or you can work with it as a plain object:
-            const formJson = Object.fromEntries(formData.entries());
-            const keyword = formJson.keyword?.toString().trim();
-            console.log(keyword);
-
-            if (keyword) {
-              navigate(`/ad/search/${formJson.keyword}`);
-            }
-          }}
-          className="text-field-with-button"
-        >
+        <form onSubmit={handleSubmit} className="text-field-with-button">
           <input
-            ref={searchInputRef}
+            ref={inputRef}
             className="text-field main-search-field"
             type="search"
             name="keyword"
+            value={searchValue}
+            onChange={handleInputChange}
           />
           <button className="button button-primary">
             <svg
