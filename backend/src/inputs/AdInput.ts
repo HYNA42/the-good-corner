@@ -26,7 +26,7 @@ class AdInput {
   categoryId: number;
 
   @Field(() => [String], { nullable: true })
-  picturesUrls?: string[];
+  pictures?: string[];
 
   // Reçoit une liste d'IDs de tags plutôt que des objets Tag complets
   @Field(() => [Int], { nullable: true })

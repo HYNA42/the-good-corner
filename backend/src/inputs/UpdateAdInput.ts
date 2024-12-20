@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { Field, InputType, Int } from "type-graphql";
-import { Ad } from "../entities/Ad";
+// import { Ad } from "../entities/Ad";
 
 @InputType()
-class UpdateAdInput implements Partial<Ad> {
+class UpdateAdInput {
   @Field()
   id: number;
 
@@ -29,7 +29,7 @@ class UpdateAdInput implements Partial<Ad> {
   categoryId?: number;
 
   @Field(() => [String], { nullable: true })
-  picturesUrls?: string[];
+  pictures?: string[];
 
   // Reçoit une liste d'IDs de tags plutôt que des objets Tag complets
   @Field(() => [Int], { nullable: true })

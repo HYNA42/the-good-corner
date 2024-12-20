@@ -56,8 +56,8 @@ class AdResolver {
   async createNewAd(@Arg("data") newAdData: AdInput) {
     //rechercher les pictures
     const pictures: Picture[] = [];
-    if (newAdData.picturesUrls) {
-      newAdData.picturesUrls.forEach((el) => {
+    if (newAdData.pictures) {
+      newAdData.pictures.forEach((el) => {
         const newPicture = new Picture();
         newPicture.url = el;
         pictures.push(newPicture);
@@ -118,12 +118,12 @@ class AdResolver {
     }
 
     // Mise à jour des images (pictures) si `picturesUrls` est fourni
-    if (updateData.picturesUrls) {
+    if (updateData.pictures) {
       // Supprime les images actuelles associées pour les remplacer
       await Picture.delete({ ad: { id: adToUpdate.id } });
 
       // Crée et associe les nouvelles images
-      const newPictures = updateData.picturesUrls.map((url) => {
+      const newPictures = updateData.pictures.map((url) => {
         const picture = new Picture();
         picture.url = url;
         picture.ad = adToUpdate;

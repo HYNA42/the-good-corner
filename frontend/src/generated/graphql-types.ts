@@ -38,7 +38,7 @@ export type AdInput = {
   description: Scalars['String']['input'];
   location: Scalars['String']['input'];
   owner: Scalars['String']['input'];
-  picturesUrls?: InputMaybe<Array<Scalars['String']['input']>>;
+  pictures?: InputMaybe<Array<Scalars['String']['input']>>;
   price: Scalars['Float']['input'];
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   title: Scalars['String']['input'];
@@ -169,7 +169,7 @@ export type UpdateAdInput = {
   id: Scalars['Float']['input'];
   location?: InputMaybe<Scalars['String']['input']>;
   owner?: InputMaybe<Scalars['String']['input']>;
-  picturesUrls?: InputMaybe<Array<Scalars['String']['input']>>;
+  pictures?: InputMaybe<Array<Scalars['String']['input']>>;
   price?: InputMaybe<Scalars['Float']['input']>;
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   title?: InputMaybe<Scalars['String']['input']>;
