@@ -235,9 +235,16 @@ h1 {
   padding: 5px 10px; /* Espace interne pour rendre le badge lisible */
   background-color: #f0f0f0; /* Couleur de fond douce */
 
-  border-radius: 8px; 
-  font-size: 14px; 
-  color: #333; 
-  border: 1px solid #ddd; 
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ddd;
+}
 
+.picturesContainer {
+  display: flex;
+  justify-content: center;
+}
+.image-input-and-remove {
+  height: 100px;
 }

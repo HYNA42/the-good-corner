@@ -14,6 +14,7 @@ import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
+import axios from "axios";
 
 const CreateOrUpdateAdForm = ({
   defaultValues,
@@ -46,7 +47,12 @@ const CreateOrUpdateAdForm = ({
     control, // for useFieldArray
     handleSubmit,
     formState: { errors },
+    setValue,
+    getValues,
+    watch,
   } = useForm<Inputs>({ criteriaMode: "all", defaultValues: defaultValues });
+
+  watch("pictures");
 
   //useFieldArray
   const { fields, append, remove } = useFieldArray({
@@ -153,29 +159,71 @@ const CreateOrUpdateAdForm = ({
         <br />
         <label>
           Images:
-          <div>
+          <div className="picturesContainer">
             {fields.map((field, index) => (
               <div key={field.id}>
+                {/* fiels image 1 */}
+                <div className="input-group">
+                  {getValues(`pictures.${index}.url`) ? (
+                    <img
+                      src={getValues(`pictures.${index}.url`)}
+                      className="image-input-and-remove"
+                    />
+                  ) : (
+                    <input
+                      id="file"
+                      type="file"
+                      onChange={async (
+                        e: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        console.log("test", index);
+                        if (e.target.files) {
+                          const formData = new FormData();
+                          formData.append("file", e.target.files[0]);
+
+                          try {
+                            const result = await axios.post("/img", formData);
+                            console.log("file axios ==> ", result.data);
+                            setValue(
+                              `pictures.${index}.url`,
+                              result.data.filename
+                            );
+                          } catch (error) {
+                            console.error(error);
+                          }
+                        }
+                      }}
+                    />
+                  )}
+                </div>
+
+                {/* field image 2 */}
                 <input
                   className="text-field"
                   {...register(`pictures.${index}.url`, {
                     required: "L'URL de l'image est requise",
                   })}
+                  //type=hidden ne fonctionne pas :)
+                  style={{ display: "none" }}
                 />
                 {errors.pictures?.[index]?.url && (
                   <p className="error error-message">
                     {errors.pictures?.[index]?.url?.message}
                   </p>
                 )}
-                <button type="button" onClick={() => remove(index)}>
-                  Supprimer cette image
+                <button
+                  className="btn-submitAd"
+                  type="button"
+                  onClick={() => remove(index)}
+                >
+                  Supprimer
                 </button>
               </div>
             ))}
-            <button type="button" onClick={() => append({ url: "" })}>
-              Ajouter une image
-            </button>
           </div>
+          <button type="button" onClick={() => append({ url: "" })}>
+            Ajouter une image
+          </button>
         </label>
         {/* images */}
 
