@@ -15,7 +15,7 @@ const RecentAds = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-  // console.log("getAllAds", data?.getAllAds);
+  console.log("recents ads ==>", data?.getAllAds);
 
   if (data) {
     return (

@@ -1,10 +1,5 @@
-// import axios from "axios";
-// import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"; //useParams
-// import { AdCardProps } from "../components/AdCard";
 
-// import { useQuery } from "@apollo/client";
-// import { GET_AD_BY_ID } from "../graphql/queries";
 import {
   useDeleteAdByIdMutation,
   useGetAdByIdQuery,
@@ -16,13 +11,6 @@ const AdDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [deleteAdById] = useDeleteAdByIdMutation();
-  // const { id } = useParams<{ id?: string }>();
-  // const parsedId = parseInt(id || "0", 10);
-  // console.log("id", id, "parsedId", parsedId);
-
-  // const { loading, error, data } = useQuery(GET_AD_BY_ID, {
-  //   variables: { getAdByIdId: parsedId }, // Convertir l'ID en entier
-  // });
 
   const { loading, error, data } = useGetAdByIdQuery({
     variables: { getAdByIdId: parseInt(id as string) },
@@ -35,7 +23,7 @@ const AdDetailsPage = () => {
   // console.log("loading", loading);
   // console.log("error", error);
   // console.log("data", navigate);
-
+  console.log("adDetails ===> ", adDetails);
   if (adDetails) {
     const images = adDetails.pictures?.map((picture) => picture.url) || [];
     return (
