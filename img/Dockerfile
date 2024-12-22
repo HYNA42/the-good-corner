@@ -11,6 +11,8 @@ RUN mkdir uploads
 COPY package.json package-lock.json ./
 RUN npm install
 
+# Copie du script index.js
+COPY clean.js clean.js
 COPY src src
 
 COPY uploads uploads
