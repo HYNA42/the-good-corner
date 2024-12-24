@@ -25,25 +25,50 @@ const client = new Client({
     //connection avec la bdd
     await client.connect();
 
+    //requete bdd pour récupérer tous les urls
     const res = await client.query(`
       SELECT url FROM "picture" WHERE "adId" IS NOT NULL;
     `);
 
-    //recupères les urls non nuls
+    //liste des urls valides (non nuls)
     const fileToKepp = res.rows.map((el) => el.url);
-    console.log("response FileToKepp==> ", fileToKepp);
+    console.log("db list files (filetoKeep) ==> ", fileToKepp);
 
-    //recupérer la liste des fichiers dans le dossiers uploads
-    const files = fs.readdirSync("./uploads").map((file) => "/img/" + file);
-    console.log("files list on uploads ==> ", files);
+    // liste des fichiers dans le dossiers uploads
+    const files = fs.readdirSync("/app/uploads").map((file) => "/img/" + file);
+    console.log("uploads list files ==> ", files);
 
     //supprimer les fichiers présenets dans uploads et qui ne sont pas dans la bdd
-    fs.readdirSync("./uploads").forEach((file) => {
+
+    fs.readdirSync("/app/uploads").forEach((file) => {
+      //recupérer l'age du ficher
+      const createdAt = fs.statSync("/app/uploads/" + file).ctimeMs;
+
+      const age = Date.now() - createdAt;
+
+      // const isOlderThan24H = age / 1000 / 60 / 60 >= 24;
+
+      const isOlderThan24H = age / 1000 / 60 >= 60;
+
+      console.log(`
+          fileBirthDateMS ==> ${createdAt}
+          fileAgeMS ==> ${age}
+          fileAgeHours ==> ${age / 1000 / 60 / 60}
+          isAge > 24H  :  ${isOlderThan24H}
+        `);
+
       if (!fileToKepp.includes("/img/" + file)) {
-        fs.unlink("/app/uploads/" + file, (error) => {
-          if (error) throw error;
-          console.log(file, " was succesfully deleted");
-        });
+        if (isOlderThan24H) {
+          fs.unlink("/app/uploads/" + file, (error) => {
+            if (error) throw error;
+            console.log(file, " was succesfully deleted");
+          });
+        } else {
+          console.log(
+            file,
+            " File can't be deleted because it was created less than 60 minutes"
+          );
+        }
       }
     });
   } catch (error) {
