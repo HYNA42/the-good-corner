@@ -7,13 +7,14 @@ import { buildSchema } from "type-graphql";
 import AdResolver from "./resolvers/AdResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
 import TagResolver from "./resolvers/TagResolver";
+import UserResolver from "./resolvers/UserResolver";
 
 const start = async () => {
   await dataSourceGoodCorner.initialize(); // Initialise la connexion à la base de données
 
   // Construit le schéma avec `type-graphql`
   const schema = await buildSchema({
-    resolvers: [AdResolver, CategoryResolver, TagResolver], // Enregistre le resolver pour les annonces (Ad)
+    resolvers: [AdResolver, CategoryResolver, TagResolver,UserResolver], // Enregistre le resolver pour les annonces (Ad)
   });
 
   // Crée le serveur Apollo avec le schéma `type-graphql`

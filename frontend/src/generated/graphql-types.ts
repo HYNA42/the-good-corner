@@ -62,6 +62,7 @@ export type Mutation = {
   deleteAd: Scalars['String']['output'];
   deleteCategory: Scalars['String']['output'];
   deleteTag: Scalars['String']['output'];
+  register: Scalars['String']['output'];
   updateAd: Ad;
   updateCategory: Scalars['String']['output'];
   updateTag: Scalars['String']['output'];
@@ -95,6 +96,11 @@ export type MutationDeleteCategoryArgs = {
 
 export type MutationDeleteTagArgs = {
   id: Scalars['Float']['input'];
+};
+
+
+export type MutationRegisterArgs = {
+  data: UserInput;
 };
 
 
@@ -183,6 +189,11 @@ export type UpdateCategoryInput = {
 export type UpdateTagInput = {
   id: Scalars['Int']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type CreateNewAddMutationVariables = Exact<{
