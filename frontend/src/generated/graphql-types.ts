@@ -243,6 +243,13 @@ export type GetAllTagAndCategoryQueryVariables = Exact<{ [key: string]: never; }
 
 export type GetAllTagAndCategoryQuery = { __typename?: 'Query', getAllTag: Array<{ __typename?: 'Tag', id: number, name: string }>, getAllCategory: Array<{ __typename?: 'Category', id: number, title: string }> };
 
+export type LoginQueryVariables = Exact<{
+  data: UserInput;
+}>;
+
+
+export type LoginQuery = { __typename?: 'Query', login: string };
+
 
 export const CreateNewAddDocument = gql`
     mutation createNewAdd($data: AdInput!) {
@@ -519,3 +526,41 @@ export type GetAllTagAndCategoryQueryHookResult = ReturnType<typeof useGetAllTag
 export type GetAllTagAndCategoryLazyQueryHookResult = ReturnType<typeof useGetAllTagAndCategoryLazyQuery>;
 export type GetAllTagAndCategorySuspenseQueryHookResult = ReturnType<typeof useGetAllTagAndCategorySuspenseQuery>;
 export type GetAllTagAndCategoryQueryResult = Apollo.QueryResult<GetAllTagAndCategoryQuery, GetAllTagAndCategoryQueryVariables>;
+export const LoginDocument = gql`
+    query Login($data: UserInput!) {
+  login(data: $data)
+}
+    `;
+
+/**
+ * __useLoginQuery__
+ *
+ * To run a query within a React component, call `useLoginQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLoginQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLoginQuery({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useLoginQuery(baseOptions: Apollo.QueryHookOptions<LoginQuery, LoginQueryVariables> & ({ variables: LoginQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+      }
+export function useLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LoginQuery, LoginQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+        }
+export function useLoginSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<LoginQuery, LoginQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+        }
+export type LoginQueryHookResult = ReturnType<typeof useLoginQuery>;
+export type LoginLazyQueryHookResult = ReturnType<typeof useLoginLazyQuery>;
+export type LoginSuspenseQueryHookResult = ReturnType<typeof useLoginSuspenseQuery>;
+export type LoginQueryResult = Apollo.QueryResult<LoginQuery, LoginQueryVariables>;

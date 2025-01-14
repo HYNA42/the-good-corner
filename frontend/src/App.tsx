@@ -12,6 +12,7 @@ import AdUpdatePage from "./pages/AdUpdatePage";
 import SingleFileUploader from "./pages/TestFileUpload";
 import AdsByTitlePage from "./pages/AdSearchPage";
 import NewAdFormPage from "./pages/NewAdFormPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -21,17 +22,21 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="ad/new" element={<NewAdFormPage />} />
           <Route path="ad/:id" element={<AdDetailsPage />} />
-       
+
           <Route path="ad/update/:id" element={<AdUpdatePage />} />
           <Route path="ad/search" element={<AdsByTitlePage />} />
 
           {/* routes unused */}
           <Route path="ad/category/:keyword" element={<AdsByCategoryPage />} />
-      
+
           <Route path="category/new" element={<NewCategoryFormPage />} />
-          
+
           {/* composant test update image */}
           <Route path="testimg" element={<SingleFileUploader />} />
+
+          <Route path="login" element={<LoginPage />} />
+
+
         </Route>
       </Routes>
       <ToastContainer theme="colored" />

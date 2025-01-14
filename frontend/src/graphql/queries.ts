@@ -65,3 +65,11 @@ export const GET_ALL_CATEGORY_AND_TAG = gql`
     }
   }
 `;
+
+//login user with generate jwt token
+export const LOGIN = gql`
+  query Login($data: UserInput!) {
+    login(data: $data)
+  }
+`;
+
