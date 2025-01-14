@@ -22,7 +22,14 @@ const start = async () => {
 
   // Construit le schéma avec `type-graphql`
   const schema = await buildSchema({
-    resolvers: [AdResolver, CategoryResolver, TagResolver,UserResolver], // Enregistre le resolver pour les annonces (Ad)
+    resolvers: [AdResolver, CategoryResolver, TagResolver, UserResolver],
+    authChecker: ({ context }) => {
+      if (context.email) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   });
 
   // Crée le serveur Apollo avec le schéma `type-graphql`
@@ -33,7 +40,7 @@ const start = async () => {
   // Démarre le serveur Apollo
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
-    
+
     context: async ({ req }) => {
       const token = req.headers.authorization?.split("Bearer ")[1];
       if (token !== undefined) {
