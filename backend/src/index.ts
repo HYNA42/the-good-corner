@@ -10,6 +10,8 @@ import CategoryResolver from "./resolvers/CategoryResolver";
 import TagResolver from "./resolvers/TagResolver";
 import UserResolver from "./resolvers/UserResolver";
 
+import jwt, { Secret } from "jsonwebtoken";
+
 const start = async () => {
   if (!process.env.JWT_SECRET_KEY) {
     throw new Error("no jwt secret");
@@ -31,15 +33,23 @@ const start = async () => {
   // Démarre le serveur Apollo
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
+    
+    context: async ({ req }) => {
+      const token = req.headers.authorization?.split("Bearer ")[1];
+      if (token !== undefined) {
+        const payload = jwt.verify(token, process.env.JWT_SECRET_KEY as Secret);
+        console.log("payload in context", payload);
+        if (payload) {
+          console.log("payload was found and returned to resolver");
+          return payload;
+        }
+      }
+      return {};
+    },
+    
   });
 
   console.log(`🚀 Server ready at : ${url}`);
 };
 
 start();
-
-// server: {
-//   watch: {
-//     usePolling: true
-//   }
-// }
