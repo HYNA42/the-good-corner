@@ -1,4 +1,5 @@
 // src/index.ts
+import "dotenv/config";
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
@@ -10,6 +11,11 @@ import TagResolver from "./resolvers/TagResolver";
 import UserResolver from "./resolvers/UserResolver";
 
 const start = async () => {
+  if (!process.env.JWT_SECRET_KEY) {
+    throw new Error("no jwt secret");
+  }
+  
+
   await dataSourceGoodCorner.initialize(); // Initialise la connexion à la base de données
 
   // Construit le schéma avec `type-graphql`

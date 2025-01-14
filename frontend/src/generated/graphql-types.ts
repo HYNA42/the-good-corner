@@ -133,6 +133,7 @@ export type Query = {
   getAllTag: Array<Tag>;
   getCategoryById: Category;
   getTagById: Tag;
+  login: Scalars['String']['output'];
 };
 
 
@@ -154,6 +155,11 @@ export type QueryGetCategoryByIdArgs = {
 
 export type QueryGetTagByIdArgs = {
   id: Scalars['Float']['input'];
+};
+
+
+export type QueryLoginArgs = {
+  data: UserInput;
 };
 
 export type Tag = {
