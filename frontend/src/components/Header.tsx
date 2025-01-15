@@ -40,6 +40,9 @@ const Header = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  const isLoggedIn = localStorage.getItem("token") ? true : false;
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
@@ -77,10 +80,39 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <Link to="/ad/new" className="button link-button">
-          <span className="mobile-short-label">Publier</span>
-          <span className="desktop-long-label">Publier une annonce</span>
-        </Link>
+
+        {!isLoggedIn && (
+          <>
+            <Link to="/login" className="button link-button">
+              <span className="mobile-short-label">Login</span>
+              <span className="desktop-long-label">Login</span>
+            </Link>
+            <Link to="/register" className="button link-button">
+              <span className="mobile-short-label">Register</span>
+              <span className="desktop-long-label">Register</span>
+            </Link>
+          </>
+        )}
+
+        {isLoggedIn && (
+          <>
+            <Link to="/ad/new" className="button link-button">
+              <span className="mobile-short-label">Publier</span>
+              <span className="desktop-long-label">Publier une annonce</span>
+            </Link>
+
+            <button
+              className="button link-button"
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/");
+              }}
+            >
+              Logout
+            </button>
+          </>
+        )}
+        
       </div>
       <nav className="categories-navigation">
         {getAllCategory?.map((el: any) => (

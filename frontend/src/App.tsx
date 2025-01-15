@@ -13,6 +13,7 @@ import SingleFileUploader from "./pages/TestFileUpload";
 import AdsByTitlePage from "./pages/AdSearchPage";
 import NewAdFormPage from "./pages/NewAdFormPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="testimg" element={<SingleFileUploader />} />
 
           <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
 
 
         </Route>

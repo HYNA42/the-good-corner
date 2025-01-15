@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useLoginLazyQuery } from "../generated/graphql-types";
+import { useRegisterMutation } from "../generated/graphql-types";
 import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
@@ -9,9 +9,10 @@ type LoginInputs = {
   password: string;
 };
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [registerMutation] = useRegisterMutation();
   const navigate = useNavigate();
-  const [login] = useLoginLazyQuery();
+
   const {
     register,
     handleSubmit,
@@ -19,32 +20,29 @@ const LoginPage = () => {
   } = useForm<LoginInputs>();
 
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
-    console.log("Login data", data);
+    console.log("register data", data);
 
-    login({
+    registerMutation({
       variables: { data: { email: data.email, password: data.password } },
       onCompleted: (result) => {
-          console.log("login success", result);
-        localStorage.setItem('token', result.login)
-        navigate("/");
+        console.log("register success", result);
+        navigate("/login");
       },
       onError: (error) => {
-        console.log("Login error:", error);
+        console.log("register error:", error);
       },
     });
   };
 
-    
-    
   return (
     <>
       <div className="login-container">
-        <h2>Login</h2>
+        <h2>Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>
             Email:
             <input
-              defaultValue={"hyna@duck.com"}
+              defaultValue={"john.doe@gmail.com"}
               type="email"
               placeholder="email"
               {...register("email", { required: "Email is required" })}
@@ -70,7 +68,7 @@ const LoginPage = () => {
           )}
 
           <button className="btn-submitAd" type="submit">
-            Login
+            Sign up
           </button>
         </form>
       </div>
@@ -78,4 +76,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

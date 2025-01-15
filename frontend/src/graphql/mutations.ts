@@ -42,3 +42,10 @@ export const UPDATE_AD = gql`
     }
   }
 `;
+
+//login user
+export const REGISTER = gql`
+  mutation Register($data: UserInput!) {
+    register(data: $data)
+  }
+`;
