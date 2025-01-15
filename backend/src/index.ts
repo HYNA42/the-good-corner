@@ -8,7 +8,7 @@ import { buildSchema } from "type-graphql";
 import AdResolver from "./resolvers/AdResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
 import TagResolver from "./resolvers/TagResolver";
-import UserResolver from "./resolvers/UserResolver";
+import UserResolver, { ContextType } from "./resolvers/UserResolver";
 import * as cookie from "cookie";
 import jwt, { Secret } from "jsonwebtoken";
 
@@ -22,7 +22,7 @@ const start = async () => {
   // Construit le schéma avec `type-graphql`
   const schema = await buildSchema({
     resolvers: [AdResolver, CategoryResolver, TagResolver, UserResolver],
-    authChecker: ({ context }) => {
+    authChecker: ({ context }: { context: ContextType }) => {
       if (context.email) {
         return true;
       } else {
@@ -40,11 +40,11 @@ const start = async () => {
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
 
-    context: async ({ req, res }) => {
+    context: async ({ req, res }): Promise<ContextType> => {
       // console.log("Headers ===> ", req.headers);
       if (req.headers.cookie) {
         const cookies = cookie.parse(req.headers.cookie as string);
-        console.log("Headers ===> ", req.headers);
+        // console.log("Headers ===> ", req.headers);
         console.log("Cookies in Headers ===> ", cookies);
 
         if (cookies.token !== undefined) {

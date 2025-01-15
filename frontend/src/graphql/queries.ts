@@ -72,9 +72,26 @@ export const GET_ALL_CATEGORY_AND_TAG = gql`
   }
 `;
 
-//login user with generate jwt token
-export const LOGIN = gql`
-  query Login($data: UserInput!) {
-    login(data: $data)
+//getUser info : verif if he is logged
+export const GET_USER_INFO = gql`
+  query GetUserInfo {
+    getUserInfo {
+      isLoggedIn
+      email
+    }
+  }
+`;
+
+//get both categories and userInfo
+export const GET_ALL_CATEGORIES_AND_USER_INFO = gql`
+  query GetAllCategoryAndUserInfo {
+    getAllCategory {
+      id
+      title
+    }
+    getUserInfo {
+      isLoggedIn
+      email
+    }
   }
 `;

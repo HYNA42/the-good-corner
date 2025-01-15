@@ -4,8 +4,10 @@ import React, { useRef, useState } from "react";
 
 import {
   useGetAllAdsLazyQuery,
-  useGetAllTagAndCategoryQuery,
+  useGetAllCategoryAndUserInfoQuery,
+  useLogoutMutation,
 } from "../generated/graphql-types";
+import { GET_USER_INFO } from "../graphql/queries";
 
 export type category = {
   id: number;
@@ -16,8 +18,17 @@ const Header = () => {
   const navigate = useNavigate();
   //state pour stocker le keyword
   const [searchValue, setSearchValue] = useState("");
-  const { loading, error, data } = useGetAllTagAndCategoryQuery();
-  const { getAllCategory } = data || {};
+
+    const [logout] = useLogoutMutation({
+      refetchQueries: [{ query: GET_USER_INFO }], // Actualiser l'état utilisateur après logout
+    });
+  
+    const handleLogout = async() => {
+      await logout();
+      navigate("/"); //redirection à la page de connexion
+    };
+
+  const {data:userInfoAndCategories}=useGetAllCategoryAndUserInfoQuery()
   const [getAllAdsByTitle] = useGetAllAdsLazyQuery();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -41,10 +52,8 @@ const Header = () => {
     setSearchValue(e.target.value);
   };
 
-  const isLoggedIn = localStorage.getItem("token") ? true : false;
+  const isLoggedIn = userInfoAndCategories?.getUserInfo.isLoggedIn ? true : false;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <header className="header">
@@ -103,10 +112,7 @@ const Header = () => {
 
             <button
               className="button link-button"
-              onClick={() => {
-                localStorage.removeItem("token");
-                navigate("/");
-              }}
+              onClick={handleLogout}
             >
               Logout
             </button>
@@ -115,7 +121,7 @@ const Header = () => {
         
       </div>
       <nav className="categories-navigation">
-        {getAllCategory?.map((el: any) => (
+        {userInfoAndCategories?.getAllCategory.map((el: any) => (
           <Link
             key={el.id}
             to={`/ad/category/${el.title}`}

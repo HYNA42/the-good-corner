@@ -43,9 +43,24 @@ export const UPDATE_AD = gql`
   }
 `;
 
-//login user
+//register user
 export const REGISTER = gql`
   mutation Register($data: UserInput!) {
     register(data: $data)
+  }
+`;
+
+//login user with generate jwt token
+export const LOGIN = gql`
+  mutation Login($data: UserInput!) {
+    login(data: $data)
+  }
+`;
+
+//loggout
+
+export const LOGOUT = gql`
+  mutation Logout {
+    logout
   }
 `;

@@ -1,7 +1,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useLoginLazyQuery } from "../generated/graphql-types";
+// import { useLoginLazyQuery } from "../generated/graphql-types";
 import { useNavigate } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../generated/graphql-types";
+import { GET_USER_INFO } from "../graphql/queries";
 // import { toast } from "react-toastify";
 
 type LoginInputs = {
@@ -11,7 +12,10 @@ type LoginInputs = {
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [login] = useLoginLazyQuery();
+  const [login] = useLoginMutation({
+    refetchQueries: [{ query: GET_USER_INFO }],
+  });
+
   const {
     register,
     handleSubmit,
