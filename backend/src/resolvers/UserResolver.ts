@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import * as argon2 from "argon2";
 
 // import CategoryInput from "../inputs/CategoryInput ";
@@ -22,7 +22,7 @@ class UserResolver {
 
   //Login user
   @Query(() => String)
-  async login(@Arg("data") loginData: UserInput) {
+  async login(@Arg("data") loginData: UserInput,@Ctx() context: any) {
     let isPasswordCorrect = false;
     const user = await User.findOneBy({ email: loginData.email });
 
@@ -33,13 +33,14 @@ class UserResolver {
       );
     }
 
-    //if user identified : generate token
+    //if user identified : generate token and return ???
     if (isPasswordCorrect === true && user !== null) {
       const token = jwt.sign(
         { email: user.email },
         process.env.JWT_SECRET_KEY as Secret
       );
-      return token;
+      context.res.setHeader("Set-Cookie", `token=${token}; Secure; HttpOnly`);
+      return "ok";
     } else {
       throw new Error("Incorrect login");
     }

@@ -24,8 +24,8 @@ const LoginPage = () => {
     login({
       variables: { data: { email: data.email, password: data.password } },
       onCompleted: (result) => {
-          console.log("login success", result);
-        localStorage.setItem('token', result.login)
+        console.log("login success", result);
+        // localStorage.setItem('token', result.login)
         navigate("/");
       },
       onError: (error) => {
@@ -34,8 +34,6 @@ const LoginPage = () => {
     });
   };
 
-    
-    
   return (
     <>
       <div className="login-container">
