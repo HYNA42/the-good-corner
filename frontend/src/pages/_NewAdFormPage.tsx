@@ -12,7 +12,7 @@ import { GET_ALL_ADS } from "../graphql/queries";
 type Inputs = {
   title: string;
   description: string;
-  owner: string;
+  user: string;
   price: number;
   location: string;
   createdAt: string;
@@ -29,12 +29,11 @@ const NewAdFormPage = () => {
     { data: mutationData, loading: mutationLoading, error: mutationError },
   ] = useCreateNewAddMutation({ refetchQueries: [GET_ALL_ADS] });
 
-
   //valeurs par défaut
   const defaultValues: Inputs = {
     title: "Titre par défaut",
     description: "Description par défaut",
-    owner: "Vendeur par défaut",
+    user: "Vendeur par défaut",
     price: 100,
     location: "Ville par défaut",
     createdAt: new Date().toISOString().slice(0, 10),
@@ -68,7 +67,7 @@ const NewAdFormPage = () => {
     const dataForBackend = {
       title: formData.title,
       description: formData.description,
-      owner: formData.owner,
+      user: formData.user,
       price: parseFloat(formData.price.toString()), // Convertir en Float
       location: formData.location,
       createdAt: new Date(formData.createdAt).toISOString(), // Assurez-vous que c'est une ISO string
@@ -135,13 +134,13 @@ const NewAdFormPage = () => {
         <br />
         <input
           className="text-field"
-          {...register("owner", {
+          {...register("user", {
             minLength: { value: 2, message: "Minimum 2 characters" },
             required: "Le vendeur est requis",
           })}
         />
-        {errors.owner && (
-          <p className="error error-message">{errors.owner.message}</p>
+        {errors.user && (
+          <p className="error error-message">{errors.user.message}</p>
         )}
       </label>
 

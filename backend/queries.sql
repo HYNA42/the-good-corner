@@ -3,14 +3,14 @@
 -- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 -- 	title VARCHAR(100) NOT NULL,
 -- 	description TEXT,
--- 	owner VARCHAR(100) NOT NULL,
+-- 	user VARCHAR(100) NOT NULL,
 -- 	price INT,
 --     picture VARCHAR(100),
 --     location VARCHAR(100),
 -- 	createdAt DATE
 -- );
 
--- INSERT INTO ad (title, description, owner, price, picture, location, createdAt) 
+-- INSERT INTO ad (title, description, user, price, picture, location, createdAt) 
 -- VALUES 
 -- ('Chaussures', 'Comme neuves', 'alice@dupont.fr', 35, 'https://image.fr/chaussures.jpg', 'Paris', DATETIME('now')),
 -- ('Vélo de route', 'Vélo très léger, idéal pour la ville', 'jean.pierre@mail.fr', 150, 'https://image.fr/velo.jpg', 'Lyon', DATETIME('now')),

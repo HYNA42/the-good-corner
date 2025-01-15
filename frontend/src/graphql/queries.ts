@@ -1,12 +1,15 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_ADS = gql`
-  query GetAllAds($title: String,$category: String) {
-    getAllAds(title: $title,category: $category) {
+  query GetAllAds($title: String, $category: String) {
+    getAllAds(title: $title, category: $category) {
       id
       title
       description
-      owner
+      user {
+        id
+        email
+      }
       price
       location
       createdAt
@@ -32,7 +35,10 @@ export const GET_AD_BY_ID = gql`
       id
       title
       description
-      owner
+      user {
+        id
+        email
+      }
       price
       pictures {
         id
@@ -72,4 +78,3 @@ export const LOGIN = gql`
     login(data: $data)
   }
 `;
-

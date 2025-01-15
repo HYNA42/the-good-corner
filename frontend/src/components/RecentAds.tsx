@@ -28,7 +28,7 @@ const RecentAds = () => {
               <AdCard
                 id={el.id}
                 title={el.title}
-                pictures={el.pictures?.map(pic=>pic.url)}
+                pictures={el.pictures?.map((pic) => pic.url)}
                 price={el.price}
                 category={el.category}
               />
@@ -39,7 +39,7 @@ const RecentAds = () => {
                   if (el.id) {
                     await deleteAdById({
                       variables: { deleteAdId: el.id },
-                      refetchQueries:[GET_ALL_ADS],
+                      refetchQueries: [GET_ALL_ADS],
                       awaitRefetchQueries: true,
                     });
                   }

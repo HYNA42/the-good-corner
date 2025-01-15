@@ -13,7 +13,7 @@ type Inputs = {
   id: number;
   title: string;
   description: string;
-  owner: string;
+  user: string;
   price: number;
   location: string;
   createdAt: string;
@@ -45,7 +45,7 @@ const AdUpdatePage = () => {
     id: idForBack,
     title: "",
     description: "",
-    owner: "",
+    user: "",
     price: 0,
     location: "",
     createdAt: "",
@@ -77,13 +77,12 @@ const AdUpdatePage = () => {
         id: idForBack,
         title: adDetails.title || "",
         description: adDetails.description || "",
-        owner: adDetails.owner || "",
+        user: adDetails.user || "",
         price: adDetails.price || 0,
         location: adDetails.location || "",
         createdAt: adDetails.createdAt?.slice(0, 10) || "",
         categoryId: adDetails.category?.id || 0,
-        pictures:
-          adDetails.pictures?.map((pic) => ({ url: pic.url })) || [],
+        pictures: adDetails.pictures?.map((pic) => ({ url: pic.url })) || [],
         tagIds: adDetails.tags?.map((tag) => tag.id) || [],
       });
     }
@@ -95,7 +94,7 @@ const AdUpdatePage = () => {
       id: idForBack,
       title: formData.title,
       description: formData.description,
-      owner: formData.owner,
+      user: formData.user,
       price: parseFloat(formData.price.toString()),
       location: formData.location,
       createdAt: new Date(formData.createdAt).toISOString(),
@@ -122,7 +121,6 @@ const AdUpdatePage = () => {
 
   if (updateLoading) return <p>Loading data...</p>;
   if (updateError) return <p>Error fetching data: {updateError.message}</p>;
-
 
   return (
     <>
@@ -164,13 +162,13 @@ const AdUpdatePage = () => {
           <br />
           <input
             className="text-field"
-            {...register("owner", {
+            {...register("user", {
               minLength: { value: 2, message: "Minimum 2 characters" },
               required: "Le vendeur est requis",
             })}
           />
-          {errors.owner && (
-            <p className="error error-message">{errors.owner.message}</p>
+          {errors.user && (
+            <p className="error error-message">{errors.user.message}</p>
           )}
         </label>
 

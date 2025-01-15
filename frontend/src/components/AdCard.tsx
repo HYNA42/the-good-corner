@@ -4,10 +4,10 @@ export type AdCardProps = {
   id: number;
   title: string;
   price: number;
-  pictures: string[]|undefined
+  pictures: string[] | undefined;
   category: { id: number; title: string } | undefined | null;
   description?: string;
-  owner?: string;
+  user?: string;
   createdAt?: string;
 };
 

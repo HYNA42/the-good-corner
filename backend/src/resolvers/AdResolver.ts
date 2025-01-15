@@ -6,6 +6,7 @@ import { Category } from "../entities/Category";
 import { Picture } from "../entities/Picture";
 import { Tag } from "../entities/Tag";
 import { FindManyOptions, ILike, In } from "typeorm";
+import { User } from "../entities/User";
 
 @Resolver(() => Ad)
 class AdResolver {
@@ -54,7 +55,7 @@ class AdResolver {
   // Crée une nouvelle annonce
   @Authorized() //only users authorized can cerate Ad
   @Mutation(() => Ad)
-  async createNewAd(@Arg("data") newAdData: AdInput,@Ctx() context:any) {
+  async createNewAd(@Arg("data") newAdData: AdInput, @Ctx() context: any) {
     console.log("add context of create new ad mutation", context);
     //rechercher les pictures
     const pictures: Picture[] = [];
@@ -75,12 +76,17 @@ class AdResolver {
       tags = await Tag.findBy({ id: In(newAdData.tagIds) });
     }
 
+    // Rechercher l'utilisateur connecté via l'email dans le contexte
+    let user = await User.findOneBy({ email: context.email });
+    if (!user) throw new Error("User not found");
+
     // Création de l'annonce avec la catégorie associée
     const adToSave = Ad.create({
       ...newAdData,
       category,
       pictures,
       tags,
+      user, // Associe l'utilisateur connecté comme propriétaire
     });
 
     const result = await adToSave.save();

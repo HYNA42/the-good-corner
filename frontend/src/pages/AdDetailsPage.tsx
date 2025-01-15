@@ -54,12 +54,12 @@ const AdDetailsPage = () => {
               {adDetails?.description}
             </div>
             <hr className="separator" />
-            <div className="ad-details-owner">
-              Annoncée publiée par <b>{adDetails?.owner}</b>{" "}
+            <div className="ad-details-user">
+              Annoncée publiée par <b>{adDetails?.user?.email}</b>{" "}
               {new Date(adDetails?.createdAt as string).toDateString()}.
             </div>
             <a
-              href={`mailto:${adDetails?.owner}`}
+              href={`mailto:${adDetails?.user}`}
               className="button button-primary link-button"
             >
               <svg

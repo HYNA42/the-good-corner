@@ -14,6 +14,7 @@ import { Category } from "./Category";
 import { Tag } from "./Tag";
 import { Picture } from "./Picture";
 import { Field, ObjectType } from "type-graphql";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -31,9 +32,10 @@ export class Ad extends BaseEntity {
   @MinLength(10)
   description: string;
 
-  @Field()
-  @Column()
-  owner: string;
+  @Field(() => User, { nullable: true })
+  // @Column()
+  @ManyToOne(() => User, (user) => user.ads, { eager: true }) // Relation ManyToOne avec User
+  user: User;
 
   @Field()
   @Column()

@@ -42,7 +42,7 @@ const AdUpdatePage = () => {
           id: adId,
           title: adDetails?.title || "",
           description: adDetails?.description || "",
-          owner: adDetails?.owner || "",
+          user: adDetails?.user || "",
           price: adDetails?.price || 0,
           location: adDetails?.location || "",
           createdAt: adDetails?.createdAt?.slice(0, 10) || "",

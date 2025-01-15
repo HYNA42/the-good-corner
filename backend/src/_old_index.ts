@@ -5,7 +5,7 @@ import { dataSourceGoodCorner } from "./config/db";
 import { Ad } from "./entities/Ad";
 import { validate } from "class-validator";
 import { Category } from "./entities/Category";
-import {Like } from "typeorm";
+import { Like } from "typeorm";
 import { Tag } from "./entities/Tag";
 import cors from "cors";
 import { Picture } from "./entities/Picture";
@@ -24,7 +24,7 @@ app.use(cors());
 //     title: "Bike to sell",
 //     description:
 //       "My bike is blue, working fine. I'm selling it because I've got a new one",
-//     owner: "bike.seller@gmail.com",
+//     user: "bike.seller@gmail.com",
 //     price: 100,
 //     picture:
 //       "https://images.lecho.be/view?iid=dc:113129565&context=ONLINE&ratio=16/9&width=640&u=1508242455000",
@@ -36,7 +36,7 @@ app.use(cors());
 //     title: "Car to sell",
 //     description:
 //       "My car is blue, working fine. I'm selling it because I've got a new one",
-//     owner: "car.seller@gmail.com",
+//     user: "car.seller@gmail.com",
 //     price: 10000,
 //     picture:
 //       "https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
@@ -137,7 +137,7 @@ app.post("/ads", async (req, res) => {
     const newPicture = new Picture();
     newPicture.url = el;
     pictures.push(newPicture);
-  })
+  });
 
   // Création de l'annonce
   const adToSave = new Ad();
@@ -145,7 +145,7 @@ app.post("/ads", async (req, res) => {
   adToSave.createdAt = req.body.createdAt;
   adToSave.description = req.body.description;
   adToSave.location = req.body.location;
-  adToSave.owner = req.body.owner;
+  adToSave.user = req.body.user;
   // adToSave.picture = req.body.picture;
   adToSave.price = req.body.price;
   adToSave.title = req.body.title;

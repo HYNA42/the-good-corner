@@ -1,14 +1,3 @@
-// type FormDataForBackendProps = {
-//   id: number;
-//   title: string;
-//   price: number;
-//   pictures: string[] | undefined;
-//   category: { id: number; title: string } | undefined | null;
-//   description?: string;
-//   owner?: string;
-//   createdAt?: string;
-// };
-
 import { useNavigate } from "react-router-dom";
 import { useGetAllTagAndCategoryQuery } from "../generated/graphql-types";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
@@ -32,7 +21,7 @@ const CreateOrUpdateAdForm = ({
     id: number;
     title: string;
     description: string;
-    owner: string;
+    // user: string; --> déjà recu par le context == email user
     price: number;
     location: string;
     createdAt: string;
@@ -66,13 +55,13 @@ const CreateOrUpdateAdForm = ({
       id: formData.id,
       title: formData.title,
       description: formData.description,
-      owner: formData.owner,
+      // user: formData.user,
       price: parseFloat(formData.price.toString()), // Convertir en Float
       location: formData.location,
-      createdAt: new Date(formData.createdAt).toISOString(), // Assurez-vous que c'est une ISO string
-      categoryId: parseInt(formData.categoryId.toString(), 10), // Utilisez uniquement categoryId
-      pictures: formData.pictures.map((pic) => pic.url), // Conservez uniquement les URLs
-      tagIds: formData.tagIds.map((tag) => parseInt(tag.toString(), 10)), // Utilisez uniquement tagIds
+      createdAt: new Date(formData.createdAt).toISOString(), // convertir en ISO string
+      categoryId: parseInt(formData.categoryId.toString(), 10), // Utiliser uniquement categoryId
+      pictures: formData.pictures.map((pic) => pic.url), // Conserver uniquement les URLs
+      tagIds: formData.tagIds.map((tag) => parseInt(tag.toString(), 10)), // Utiliser uniquement tagIds
     };
 
     try {
@@ -123,20 +112,20 @@ const CreateOrUpdateAdForm = ({
         </label>
 
         <br />
-        <label>
+        {/* <label>
           Vendeur:
           <br />
           <input
             className="text-field"
-            {...register("owner", {
+            {...register("user", {
               minLength: { value: 2, message: "Minimum 2 characters" },
               required: "Le vendeur est requis",
             })}
           />
-          {errors.owner && (
-            <p className="error error-message">{errors.owner.message}</p>
+          {errors.user && (
+            <p className="error error-message">{errors.user.message}</p>
           )}
-        </label>
+        </label> */}
 
         <br />
         <label>

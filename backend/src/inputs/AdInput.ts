@@ -9,8 +9,8 @@ class AdInput {
   @Field()
   description: string;
 
-  @Field()
-  owner: string;
+  // @Field()
+  // user: string;
 
   @Field()
   price: number;
