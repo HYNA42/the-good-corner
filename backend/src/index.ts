@@ -8,7 +8,7 @@ import { buildSchema } from "type-graphql";
 import AdResolver from "./resolvers/AdResolver";
 import CategoryResolver from "./resolvers/CategoryResolver";
 import TagResolver from "./resolvers/TagResolver";
-import UserResolver, { ContextType } from "./resolvers/UserResolver";
+import UserResolver, { ContextType, UserRole } from "./resolvers/UserResolver";
 import * as cookie from "cookie";
 import jwt, { Secret } from "jsonwebtoken";
 
@@ -22,9 +22,16 @@ const start = async () => {
   // Construit le schéma avec `type-graphql`
   const schema = await buildSchema({
     resolvers: [AdResolver, CategoryResolver, TagResolver, UserResolver],
-    authChecker: ({ context }: { context: ContextType }) => {
+    authChecker: (
+      { context }: { context: ContextType },
+      rolesForOperation: UserRole[]
+    ) => {
       if (context.email) {
-        return true;
+        if (rolesForOperation.length === 0) {
+          return false;
+        } else {
+          return rolesForOperation.includes(context.userRole as UserRole);
+        }
       } else {
         return false;
       }
@@ -55,7 +62,7 @@ const start = async () => {
           console.log("payload in context", payload);
           if (payload) {
             console.log("payload was found and returned to resolver");
-            return { email: payload.email, res: res };
+            return { email: payload.email, userRole: payload.userRole, res: res };
           }
         }
       }

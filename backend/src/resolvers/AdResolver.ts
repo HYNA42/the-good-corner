@@ -53,7 +53,7 @@ class AdResolver {
   }
 
   // Crée une nouvelle annonce
-  @Authorized() //only users authorized can cerate Ad
+  @Authorized("USER") //only users authorized can cerate Ad
   @Mutation(() => Ad)
   async createNewAd(@Arg("data") newAdData: AdInput, @Ctx() context: any) {
     console.log("add context of create new ad mutation", context);
@@ -146,7 +146,7 @@ class AdResolver {
   }
 
   // supprimer une annonce
-  @Authorized()
+  @Authorized("ADMIN")
   @Mutation(() => String)
   async deleteAd(@Arg("id") id: number, @Ctx() context: any) {
     console.log("delete context of create new ad mutation", context);

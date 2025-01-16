@@ -25,6 +25,10 @@ export class User extends BaseEntity {
   @MinLength(8)
   hashedPassword: string;
 
+  @Column({default:"USER"})
+  role: string
+
+  
   // Relation OneToMany : Un utilisateur peut posséder plusieurs annonces
   @Field(() => [Ad], { nullable: true })
   @OneToMany(() => Ad, (ad) => ad.user)
