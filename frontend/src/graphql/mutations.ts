@@ -1,5 +1,25 @@
 import { gql } from "@apollo/client";
 
+//create new category
+export const CREATE_NEW_CATEGORY = gql`
+  mutation createNewCategory($data: CategoryInput!) {
+    createNewCategory(data: $data) {
+      id
+      title
+    }
+  }
+`;
+
+//create new Tag
+export const CREATE_NEW_TAG = gql`
+  mutation CreateNewTag($data: TagInput!) {
+    createNewTag(data: $data) {
+      id
+      name
+    }
+  }
+`;
+
 // define mutation => create new ad
 export const CREATE_NEW_AD = gql`
   mutation createNewAdd($data: AdInput!) {

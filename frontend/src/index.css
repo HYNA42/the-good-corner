@@ -152,6 +152,7 @@ h1 {
 .ad-card-image {
   width: 100%;
   border-radius: 8px;
+  height: 200px; 
 }
 
 .ad-card-text {
