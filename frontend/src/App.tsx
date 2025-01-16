@@ -38,7 +38,7 @@ function App() {
 
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path="confirm/:code?" element={<ConfirmEmailPage  />} />
+          <Route path="confirm/:code?" element={<ConfirmEmailPage />} />
         </Route>
       </Routes>
       <ToastContainer theme="colored" />

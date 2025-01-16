@@ -1,20 +1,23 @@
 import { ErrorMessage } from "@hookform/error-message";
-import axios from "axios";
 import { Fragment } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useCreateNewCategoryMutation } from "../generated/graphql-types";
+import { GET_ALL_CATEGORIES_AND_USER_INFO } from "../graphql/queries";
+
 
 type Inputs = {
   title: string;
 };
 
 const NewCategoryFormPage = () => {
+  const [createNewCategory] = useCreateNewCategoryMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ criteriaMode: "all" });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await axios.post("http://localhost:3000/categories", data);
+    createNewCategory({ variables: { data: data }, refetchQueries:[GET_ALL_CATEGORIES_AND_USER_INFO ]});
   };
   return (
     <>
