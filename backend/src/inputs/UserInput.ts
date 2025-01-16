@@ -7,6 +7,8 @@ class UserInput {
 
   @Field()
   password: string;
+
+  
 }
 
 export default UserInput;

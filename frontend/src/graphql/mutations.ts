@@ -64,3 +64,9 @@ export const LOGOUT = gql`
     logout
   }
 `;
+
+export const CONFIRM_EMAIL = gql`
+  mutation ConfirmEmail($code: String!) {
+    confirmEmail(code: $code)
+  }
+`;

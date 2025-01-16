@@ -14,6 +14,7 @@ import AdsByTitlePage from "./pages/AdSearchPage";
 import NewAdFormPage from "./pages/NewAdFormPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ConfirmEmailPage from "./pages/ConfirmEmailPage";
 
 function App() {
   return (
@@ -37,8 +38,7 @@ function App() {
 
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-
-
+          <Route path="confirm/:code?" element={<ConfirmEmailPage  />} />
         </Route>
       </Routes>
       <ToastContainer theme="colored" />

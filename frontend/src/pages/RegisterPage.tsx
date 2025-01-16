@@ -25,8 +25,8 @@ const RegisterPage = () => {
     registerMutation({
       variables: { data: { email: data.email, password: data.password } },
       onCompleted: (result) => {
-        console.log("register success", result);
-        navigate("/login");
+        console.log("register on pending : waiting confirmation code)", result);
+        navigate("/confirm");
       },
       onError: (error) => {
         console.log("register error:", error);
@@ -47,6 +47,7 @@ const RegisterPage = () => {
               placeholder="email"
               {...register("email", { required: "Email is required" })}
               className="text-field"
+              style={{ margin: "0 8px" }}
             />
           </label>
           {errors.email && (
@@ -61,6 +62,7 @@ const RegisterPage = () => {
               placeholder="password"
               {...register("password", { required: "Password is required" })}
               className="text-field"
+              style={{ margin: "0 8px" }}
             />
           </label>
           {errors.password && (

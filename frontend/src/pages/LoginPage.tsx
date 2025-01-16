@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../generated/graphql-types";
 import { GET_USER_INFO } from "../graphql/queries";
+import { toast } from "react-toastify";
 // import { toast } from "react-toastify";
 
 type LoginInputs = {
@@ -30,6 +31,7 @@ const LoginPage = () => {
       onCompleted: (result) => {
         console.log("login success", result);
         // localStorage.setItem('token', result.login)
+        toast.success("Bienvenue !");
         navigate("/");
       },
       onError: (error) => {
@@ -51,6 +53,7 @@ const LoginPage = () => {
               placeholder="email"
               {...register("email", { required: "Email is required" })}
               className="text-field"
+              style={{ margin: "0 8px" }}
             />
           </label>
           {errors.email && (
@@ -65,6 +68,7 @@ const LoginPage = () => {
               placeholder="password"
               {...register("password", { required: "Password is required" })}
               className="text-field"
+              style={{ margin: "0 8px" }}
             />
           </label>
           {errors.password && (
