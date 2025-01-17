@@ -70,3 +70,17 @@ export const CONFIRM_EMAIL = gql`
     confirmEmail(code: $code)
   }
 `;
+
+export const FORGOT_PASSWORD = gql`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email) {
+      isExist
+    }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation ChangePasseword($password: String!, $code: String!) {
+    changePasseword(password: $password, code: $code)
+  }
+`;

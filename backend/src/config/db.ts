@@ -6,6 +6,7 @@ import { DataSource } from "typeorm";
 import dotenv from "dotenv";
 import { User } from "../entities/User";
 import { UserTemp } from "../entities/UserTemp";
+import { PasswordReset } from "../entities/PasswordReset";
 
 dotenv.config(); // Charger les variables d'env
 
@@ -18,7 +19,7 @@ export const dataSourceGoodCorner = new DataSource({
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
   // database: "good_corner.sqlite",
-  entities: [Ad, Category, Tag, Picture,User,UserTemp],
+  entities: [Ad, Category, Tag, Picture, User, UserTemp, PasswordReset],
   synchronize: true,
   logging: ["error", "query"],
 });

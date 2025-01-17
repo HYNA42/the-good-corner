@@ -55,6 +55,7 @@ export type CategoryInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePasseword: Scalars['String']['output'];
   confirmEmail: Scalars['String']['output'];
   createNewAd: Ad;
   createNewCategory: Category;
@@ -62,12 +63,19 @@ export type Mutation = {
   deleteAd: Scalars['String']['output'];
   deleteCategory: Scalars['String']['output'];
   deleteTag: Scalars['String']['output'];
+  forgotPassword: UserIsExist;
   login: Scalars['String']['output'];
   logout: Scalars['String']['output'];
   register: Scalars['String']['output'];
   updateAd: Ad;
   updateCategory: Scalars['String']['output'];
   updateTag: Scalars['String']['output'];
+};
+
+
+export type MutationChangePassewordArgs = {
+  code: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -103,6 +111,11 @@ export type MutationDeleteCategoryArgs = {
 
 export type MutationDeleteTagArgs = {
   id: Scalars['Float']['input'];
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -222,6 +235,14 @@ export type UserInput = {
   password: Scalars['String']['input'];
 };
 
+export type UserIsExist = {
+  __typename?: 'UserIsExist';
+  email?: Maybe<Scalars['String']['output']>;
+  expiresAt?: Maybe<Scalars['DateTimeISO']['output']>;
+  isExist: Scalars['Boolean']['output'];
+  resetCode?: Maybe<Scalars['String']['output']>;
+};
+
 export type CreateNewAddMutationVariables = Exact<{
   data: AdInput;
 }>;
@@ -268,6 +289,21 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: string };
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'UserIsExist', isExist: boolean } };
+
+export type ChangePassewordMutationVariables = Exact<{
+  password: Scalars['String']['input'];
+  code: Scalars['String']['input'];
+}>;
+
+
+export type ChangePassewordMutation = { __typename?: 'Mutation', changePasseword: string };
 
 export type GetAllAdsQueryVariables = Exact<{
   title?: InputMaybe<Scalars['String']['input']>;
@@ -540,6 +576,71 @@ export function useConfirmEmailMutation(baseOptions?: Apollo.MutationHookOptions
 export type ConfirmEmailMutationHookResult = ReturnType<typeof useConfirmEmailMutation>;
 export type ConfirmEmailMutationResult = Apollo.MutationResult<ConfirmEmailMutation>;
 export type ConfirmEmailMutationOptions = Apollo.BaseMutationOptions<ConfirmEmailMutation, ConfirmEmailMutationVariables>;
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email) {
+    isExist
+  }
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+
+/**
+ * __useForgotPasswordMutation__
+ *
+ * To run a mutation, you first call `useForgotPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForgotPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, options);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
+export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
+export const ChangePassewordDocument = gql`
+    mutation ChangePasseword($password: String!, $code: String!) {
+  changePasseword(password: $password, code: $code)
+}
+    `;
+export type ChangePassewordMutationFn = Apollo.MutationFunction<ChangePassewordMutation, ChangePassewordMutationVariables>;
+
+/**
+ * __useChangePassewordMutation__
+ *
+ * To run a mutation, you first call `useChangePassewordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePassewordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePassewordMutation, { data, loading, error }] = useChangePassewordMutation({
+ *   variables: {
+ *      password: // value for 'password'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useChangePassewordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePassewordMutation, ChangePassewordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePassewordMutation, ChangePassewordMutationVariables>(ChangePassewordDocument, options);
+      }
+export type ChangePassewordMutationHookResult = ReturnType<typeof useChangePassewordMutation>;
+export type ChangePassewordMutationResult = Apollo.MutationResult<ChangePassewordMutation>;
+export type ChangePassewordMutationOptions = Apollo.BaseMutationOptions<ChangePassewordMutation, ChangePassewordMutationVariables>;
 export const GetAllAdsDocument = gql`
     query GetAllAds($title: String, $category: String) {
   getAllAds(title: $title, category: $category) {

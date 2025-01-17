@@ -19,6 +19,7 @@ import { UserTemp } from "../entities/UserTemp";
 
 import { v4 as uuidv4 } from "uuid";
 import { Resend } from "resend";
+import { PasswordReset } from "../entities/PasswordReset";
 // import { Resend } from 'resend';
 
 export interface ContextType {
@@ -36,6 +37,21 @@ class UserInfo {
 
   @Field({ nullable: true })
   email?: string;
+}
+
+@ObjectType()
+class UserIsExist {
+  @Field()
+  isExist: boolean;
+
+  @Field({ nullable: true })
+  resetCode?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field({ nullable: true })
+  expiresAt?: Date;
 }
 
 @Resolver(() => User)
@@ -128,6 +144,94 @@ class UserResolver {
     });
     userTemp?.remove();
     return `userTemp verified successful and new user is created`;
+  }
+
+  //reset passeword code reset
+  @Mutation(() => UserIsExist)
+  async forgotPassword(@Arg("email") email: string) {
+    const user = await User.findOneBy({ email: email });
+
+    //if user not found return false
+    if (!user) {
+      throw new Error("Invalid login info");
+    }
+
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 10); // Ajoute 15 minutes
+
+    //if user exist, save in db
+    const resetCode = uuidv4();
+    await PasswordReset.save({
+      email,
+      resetCode,
+      expiresAt,
+    });
+
+    //send mail with rest code
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    (async function () {
+      const { data, error } = await resend.emails.send({
+        from: "Acme <onboarding@resend.dev>",
+        to: [user.email],
+        subject: "Reset Your Password",
+        html: `
+        <p>You have requested to reset your password. Please use the link below to reset it:</p>
+         <a href="http://localhost:7000/changePassword/${resetCode}">
+          Reset Password
+        </a>
+         <p>This link will expire in 10 minutes.</p>
+        `,
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
+    })();
+
+    return {
+      isExist: true,
+      resetCode,
+    };
+  }
+
+  //reset code
+  @Mutation(() => String)
+  async changePasseword(
+    @Arg("code") code: string,
+    @Arg("password") password: string
+  ) {
+    const userResetedHisPassword = await PasswordReset.findOneByOrFail({
+      resetCode: code,
+    });
+
+    const user = await User.findOneByOrFail({
+      email: userResetedHisPassword.email,
+    });
+
+    /*compare actual x expiresAt date
+      if actualDate > expiresAt : chnage pwd
+      else : no change
+    */
+
+    console.log(user);
+    const now = new Date();
+    const timeDifferenceMinutes = Math.floor(
+      (now.getTime() - userResetedHisPassword.expiresAt.getTime()) / (1000 * 60)
+    );
+
+    if (timeDifferenceMinutes > 0) {
+      throw new Error("Delay passed");
+    } //delai is passed
+
+    user.hashedPassword = await argon2.hash(password);
+    user.save();
+    await userResetedHisPassword.remove();
+    return `Password changed successful
+      on delai : ==> ${timeDifferenceMinutes} min
+    `;
   }
 }
 

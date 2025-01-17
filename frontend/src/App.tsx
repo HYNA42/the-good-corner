@@ -15,6 +15,8 @@ import NewAdFormPage from "./pages/NewAdFormPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConfirmEmailPage from "./pages/ConfirmEmailPage";
+import ForgotPasswordPage from "./pages/ForgotPassword";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   return (
@@ -38,7 +40,14 @@ function App() {
 
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path="confirm/:code?" element={<ConfirmEmailPage  />} />
+          <Route path="confirm/:code?" element={<ConfirmEmailPage />} />
+
+          <Route path="forgotPassword" element={<ForgotPasswordPage />} />
+
+          <Route
+            path="changePassword/:code?"
+            element={< ChangePassword/>}
+          />
         </Route>
       </Routes>
       <ToastContainer theme="colored" />

@@ -1,9 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 // import { useLoginLazyQuery } from "../generated/graphql-types";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../generated/graphql-types";
 import { GET_USER_INFO } from "../graphql/queries";
 import { toast } from "react-toastify";
+import { useState } from "react";
 // import { toast } from "react-toastify";
 
 type LoginInputs = {
@@ -16,6 +17,8 @@ const LoginPage = () => {
   const [login] = useLoginMutation({
     refetchQueries: [{ query: GET_USER_INFO }],
   });
+
+  const [resetPassword, setResetPassword] = useState(false);
 
   const {
     register,
@@ -35,7 +38,9 @@ const LoginPage = () => {
         navigate("/");
       },
       onError: (error) => {
-        console.log("Login error:", error);
+        setResetPassword(true);
+        console.error("Login error:", error);
+        toast.error("Invalide login info");
       },
     });
   };
@@ -79,6 +84,7 @@ const LoginPage = () => {
             Login
           </button>
         </form>
+        {resetPassword && <Link to="/forgotPassword">Reset password</Link>}
       </div>
     </>
   );
