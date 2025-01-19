@@ -7,6 +7,7 @@ import { Picture } from "../entities/Picture";
 import { Tag } from "../entities/Tag";
 import { FindManyOptions, ILike, In } from "typeorm";
 import { User } from "../entities/User";
+import { ContextType } from "./UserResolver";
 
 @Resolver(() => Ad)
 class AdResolver {
@@ -93,13 +94,22 @@ class AdResolver {
     return result;
   }
 
+  @Authorized("USER")
   @Mutation(() => Ad)
-  async updateAd(@Arg("data") updateData: UpdateAdInput) {
+  async updateAd(
+    @Arg("data") updateData: UpdateAdInput,
+    @Ctx() context: ContextType
+  ) {
     // Récupère l'annonce avec ses relations "tags", "category" et "pictures"
+
     let adToUpdate = await Ad.findOne({
       where: { id: updateData.id },
       relations: ["tags", "category", "pictures"],
     });
+
+    if (!(adToUpdate?.user.email === context.email)) {
+      throw new Error("Unauthorized");
+    }
 
     if (!adToUpdate) {
       throw new Error("Ad not found");
@@ -148,7 +158,7 @@ class AdResolver {
   // supprimer une annonce
   @Authorized("ADMIN")
   @Mutation(() => String)
-  async deleteAd(@Arg("id") id: number, @Ctx() context: any) {
+  async deleteAd(@Arg("id") id: number, @Ctx() context: ContextType) {
     console.log("delete context of create new ad mutation", context);
     let adToDelete = await Ad.findOneByOrFail({ id: id });
     const result = await Ad.remove(adToDelete);

@@ -14,14 +14,12 @@ const AdUpdatePage = () => {
   // Query to get the existing Ad details
   const {
     data: adData,
-    loading: adLoading,
-    error: adError,
   } = useGetAdByIdQuery({
     variables: { getAdByIdId: adId },
   });
 
   // Mutation to update the ad
-  const [updateAdMutation, { loading: updateLoading, error: updateError }] =
+  const [updateAdMutation] =
     useUpdateAdMutation({
       refetchQueries: [GET_ALL_ADS],
     });
@@ -29,11 +27,11 @@ const AdUpdatePage = () => {
   const adDetails = adData?.getAdById;
   console.log("AdDetails ", adDetails);
 
-  if (adLoading) return <p>Loading data...</p>;
-  if (adError) return <p>Error fetching data: {adError.message}</p>;
+  // if (adLoading) return <p>Loading data...</p>;
+  // if (adError) return <p>Error fetching data: {adError.message}</p>;
 
-  if (updateLoading) return <p>Loading data...</p>;
-  if (updateError) return <p>Error fetching data: {updateError.message}</p>;
+  // if (updateLoading) return <p>Loading data...</p>;
+  // if (updateError) return <p>Error fetching data: {updateError.message}</p>;
 
   return (
     <>

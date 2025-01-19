@@ -69,8 +69,9 @@ const CreateOrUpdateAdForm = ({
       toast.success("success");
       navigate("/");
     } catch (error) {
-      console.log("Error submitting ad:", error);
-      toast.error("Une erreur est survenue");
+      const err = error as Error;
+      console.log("Error:", error);
+      toast.error(err.message || "Une erreur est survenue");
     }
     console.log("Payload sent to backend:", dataForBackend);
   };
@@ -297,7 +298,7 @@ const CreateOrUpdateAdForm = ({
 
         <br />
         <button className="btn-submitAd" type="submit">
-          Créer une annonce
+          Envoyer
         </button>
       </form>
     </>

@@ -44,8 +44,8 @@ class UserIsExist {
   @Field()
   isExist: boolean;
 
-  @Field({ nullable: true })
-  resetCode?: string;
+  // @Field({ nullable: true })
+  // resetCode?: string;
 
   @Field({ nullable: true })
   email?: string;

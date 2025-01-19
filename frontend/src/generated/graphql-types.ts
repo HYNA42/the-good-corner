@@ -240,7 +240,6 @@ export type UserIsExist = {
   email?: Maybe<Scalars['String']['output']>;
   expiresAt?: Maybe<Scalars['DateTimeISO']['output']>;
   isExist: Scalars['Boolean']['output'];
-  resetCode?: Maybe<Scalars['String']['output']>;
 };
 
 export type CreateNewAddMutationVariables = Exact<{
