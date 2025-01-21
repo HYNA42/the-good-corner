@@ -18,7 +18,11 @@ const NewAdFormPage = () => {
   if (mutationError) return <p>Error creating ad: {mutationError.message}</p>;
 
   return (
-    <CreateOrUpdateAdForm defaultValues={{}} submitedToBackend={createNewAd} />
+    <CreateOrUpdateAdForm
+      action="Creer une annonce"
+      defaultValues={{}}
+      submitedToBackend={createNewAd}
+    />
   );
 };
 

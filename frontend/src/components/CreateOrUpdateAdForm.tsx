@@ -6,9 +6,11 @@ import { Fragment } from "react/jsx-runtime";
 import axios from "axios";
 
 const CreateOrUpdateAdForm = ({
+  action,
   defaultValues,
   submitedToBackend,
 }: {
+  action?: string | "Envoyer";
   defaultValues: object;
   submitedToBackend: any;
 }) => {
@@ -113,20 +115,6 @@ const CreateOrUpdateAdForm = ({
         </label>
 
         <br />
-        {/* <label>
-          Vendeur:
-          <br />
-          <input
-            className="text-field"
-            {...register("user", {
-              minLength: { value: 2, message: "Minimum 2 characters" },
-              required: "Le vendeur est requis",
-            })}
-          />
-          {errors.user && (
-            <p className="error error-message">{errors.user.message}</p>
-          )}
-        </label> */}
 
         <br />
         <label>
@@ -298,7 +286,7 @@ const CreateOrUpdateAdForm = ({
 
         <br />
         <button className="btn-submitAd" type="submit">
-          Envoyer
+          {action}
         </button>
       </form>
     </>

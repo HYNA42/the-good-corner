@@ -54,7 +54,7 @@ class AdResolver {
   }
 
   // Crée une nouvelle annonce
-  @Authorized("USER") //only users authorized can cerate Ad
+  @Authorized("USER", "ADMIN") //only users authorized can cerate Ad
   @Mutation(() => Ad)
   async createNewAd(@Arg("data") newAdData: AdInput, @Ctx() context: any) {
     console.log("add context of create new ad mutation", context);

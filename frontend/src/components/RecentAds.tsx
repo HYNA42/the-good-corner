@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
   useDeleteAdByIdMutation,
   useGetAllAdsQuery,
@@ -11,7 +12,7 @@ const RecentAds = () => {
   // const { loading, error, data } = useQuery(GET_ALL_ADS);
   const { loading, error, data } = useGetAllAdsQuery();
 
-  const [deleteAdById] = useDeleteAdByIdMutation();
+  const [deleteAdById] = useDeleteAdByIdMutation({refetchQueries:[GET_ALL_ADS]});
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
@@ -37,11 +38,19 @@ const RecentAds = () => {
                 onClick={async () => {
                   console.log("deleting ad with", el.id);
                   if (el.id) {
-                    await deleteAdById({
-                      variables: { deleteAdId: el.id },
-                      refetchQueries: [GET_ALL_ADS],
-                      awaitRefetchQueries: true,
-                    });
+                   
+                      await deleteAdById({
+                        variables: { deleteAdId: el.id }, onCompleted: () => {
+                          toast.success('Ad has been deleted')
+                        },
+                        onError: (error) => {
+                          const err = error as Error 
+                          toast.error(err.message)
+                        }
+                      });
+                    
+                  
+                   
                   }
                 }}
               >

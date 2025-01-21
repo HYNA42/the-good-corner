@@ -36,6 +36,7 @@ const AdUpdatePage = () => {
   return (
     <>
       <CreateOrUpdateAdForm
+        action="Modifier l'annonce"
         defaultValues={{
           id: adId,
           title: adDetails?.title || "",

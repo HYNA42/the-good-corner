@@ -6,11 +6,14 @@ import {
 } from "../generated/graphql-types";
 import Carousel from "../components/Carousel";
 import { GET_ALL_ADS } from "../graphql/queries";
+import { toast } from "react-toastify";
 
 const AdDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [deleteAdById] = useDeleteAdByIdMutation();
+  const [deleteAdById] = useDeleteAdByIdMutation({
+    refetchQueries: [GET_ALL_ADS],
+  });
 
   const { loading, error, data } = useGetAdByIdQuery({
     variables: { getAdByIdId: parseInt(id as string) },
@@ -20,9 +23,6 @@ const AdDetailsPage = () => {
   if (error) return <p>Error : {error.message}</p>;
   const adDetails = data?.getAdById;
 
-  // console.log("loading", loading);
-  // console.log("error", error);
-  // console.log("data", navigate);
   console.log("adDetails ===> ", adDetails);
   if (adDetails) {
     const images = adDetails.pictures?.map((picture) => picture.url) || [];
@@ -31,11 +31,6 @@ const AdDetailsPage = () => {
         <h2 className="ad-details-title">{adDetails?.title}</h2>
         <section className="ad-details">
           <div className="ad-details-image-container">
-            {/* <img
-              className="ad-details-image"
-              src={adDetails.pictures?.[0]?.url}
-            /> */}
-
             <Carousel images={images} />
           </div>
           <div className="ad-details-info">
@@ -84,10 +79,17 @@ const AdDetailsPage = () => {
                 if (id) {
                   await deleteAdById({
                     variables: { deleteAdId: parseInt(id) },
-                    refetchQueries: [GET_ALL_ADS],
-                    awaitRefetchQueries: true,
+
+                    onCompleted: async () => {
+                      toast.success("Ad has been delted");
+
+                      navigate("/");
+                    },
+                    onError: (error) => {
+                      const err = error as Error;
+                      toast.error(err.message);
+                    },
                   });
-                  navigate("/");
                 }
               }}
             >
