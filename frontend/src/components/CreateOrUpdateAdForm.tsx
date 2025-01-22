@@ -5,6 +5,24 @@ import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
 import axios from "axios";
 
+export type AdDefaultValues = {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  createdAt: string;
+  categoryId: number;
+  pictures: { url: string }[];
+  tagIds: number[];
+  user:
+    | string
+    | {
+        id: number;
+        email: string;
+      };
+};
+
 const CreateOrUpdateAdForm = ({
   action,
   defaultValues,
@@ -270,7 +288,7 @@ const CreateOrUpdateAdForm = ({
                   type="checkbox"
                   value={tag.id}
                   {...register("tagIds", { required: "Un tag est requis" })}
-                  // defaultChecked={defaultValues.tagIds.includes(tag.id)}
+                  defaultChecked={defaultValues.tagIds?.includes(tag.id)}
                 />
                 {tag.name}
               </label>

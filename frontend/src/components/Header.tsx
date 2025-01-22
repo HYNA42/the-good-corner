@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import React, { useRef, useState } from "react";
+import React, {  useRef, useState } from "react";
 
 import {
   useGetAllAdsLazyQuery,
@@ -28,7 +28,9 @@ const Header = () => {
       navigate("/"); //redirection à la page de connexion
     };
 
-  const {data:userInfoAndCategories}=useGetAllCategoryAndUserInfoQuery()
+
+  const { data: userInfoAndCategories } = useGetAllCategoryAndUserInfoQuery()
+  
   const [getAllAdsByTitle] = useGetAllAdsLazyQuery();
 
   const inputRef = useRef<HTMLInputElement>(null);
