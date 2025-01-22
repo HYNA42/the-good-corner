@@ -4,10 +4,12 @@ import {
   useGetAllAdsQuery,
 } from "../generated/graphql-types";
 import { GET_ALL_ADS } from "../graphql/queries";
+// import { GET_ALL_ADS } from "../graphql/queries";
 import AdCard from "./AdCard";
+// import { useQuery } from "@apollo/client";
 
 const RecentAds = () => {
-
+  // const { loading, error, data } = useQuery(GET_ALL_ADS);
   const { loading, error, data } = useGetAllAdsQuery();
 
   const [deleteAdById] = useDeleteAdByIdMutation({refetchQueries:[GET_ALL_ADS]});
@@ -20,6 +22,7 @@ const RecentAds = () => {
     return (
       <>
         <h2>Annonces récentes</h2>
+        {/* <p>Total: {total} €</p> */}
         <section className="recent-ads">
           {data.getAllAds?.map((el) => (
             <div key={el.id}>
